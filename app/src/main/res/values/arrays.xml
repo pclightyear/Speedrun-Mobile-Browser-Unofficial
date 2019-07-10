@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="images">
+        <item>@drawable/goiwbf_cover_256</item>
+        <item>@drawable/portal_cover_256</item>
+        <item>@drawable/rogue_legacy_cover_256</item>
+        <item>@drawable/smb1_cover_256</item>
+    </array>
+
+</resources>
