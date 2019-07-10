@@ -7,4 +7,11 @@
         <item>@drawable/smb1_cover_256</item>
     </array>
 
+    <array name="game_name">
+        <item>goiwbf</item>
+        <item>Portal</item>
+        <item>Rogue_Legacy</item>
+        <item>smb1</item>
+    </array>
+
 </resources>
