@@ -1,4 +1,4 @@
-package com.speedrun_mobile_unofficial;
+package com.speedrun_mobile_unofficial.homepage;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import com.speedrun_mobile_unofficial.R;
 
 public class GamePlaceholderFragmentAdapter extends BaseAdapter {
     private Context context;

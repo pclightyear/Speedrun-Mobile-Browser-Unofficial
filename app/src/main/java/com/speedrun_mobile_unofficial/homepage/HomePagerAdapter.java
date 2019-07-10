@@ -1,4 +1,4 @@
-package com.speedrun_mobile_unofficial;
+package com.speedrun_mobile_unofficial.homepage;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
