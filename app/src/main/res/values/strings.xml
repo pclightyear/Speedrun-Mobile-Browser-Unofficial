@@ -6,4 +6,5 @@
     <string name="RECENTLY_WATCHED">RECENTLY WATCHED</string>
     <string name="SUBSCRIBED_GAMES_NOT_FINISHED">Oops, we are trying hard to develop the "subscribed games" feature.</string>
     <string name="RECENTLY_WATCHED_NOT_FINISHED">Oops, we are trying hard to develop the "recently watched" feature.</string>
+    <string name="GAME_GRID_VIEW_ITEM_DESCRIPTION">You can choose the game that you are interested with.</string>
 </resources>
