@@ -15,17 +15,9 @@ public class GamePlaceholderFragmentAdapter extends BaseAdapter {
     private Context context;
     private final int[] imageId;
 
-    public GamePlaceholderFragmentAdapter (Context context) {
-        Resources resource = context.getResources();
+    public GamePlaceholderFragmentAdapter (Context context, int[] imageId) {
         this.context = context;
-
-        TypedArray typedArray = resource.obtainTypedArray(R.array.images);
-        int imageCount = typedArray.length();
-        imageId = new int[imageCount];
-        for(int i = 0; i < imageCount; i++) {
-            imageId[i] = typedArray.getResourceId(i, 0);
-        }
-        typedArray.recycle();
+        this.imageId = imageId;
     }
 
     @Override
