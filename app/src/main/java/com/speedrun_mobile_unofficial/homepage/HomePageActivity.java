@@ -11,8 +11,8 @@ import com.speedrun_mobile_unofficial.R;
 
 public class HomePageActivity extends AppCompatActivity {
 
-    private ViewPager mViewPager;
-    private TabLayout mTabLayout;
+    private ViewPager homeViewPager;
+    private TabLayout homeTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +22,11 @@ public class HomePageActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        this.setupViewPager(mViewPager);
+        homeViewPager = (ViewPager) findViewById(R.id.homePager);
+        this.setupViewPager(homeViewPager);
 
-        mTabLayout = (TabLayout) findViewById(R.id.tabs);
-        mTabLayout.setupWithViewPager(mViewPager);
+        homeTabLayout = (TabLayout) findViewById(R.id.homeTabs);
+        homeTabLayout.setupWithViewPager(homeViewPager);
     }
 
     private void setupViewPager(ViewPager viewPager) {
