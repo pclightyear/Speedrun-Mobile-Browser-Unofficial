@@ -10,27 +10,25 @@ import android.widget.TextView;
 
 import com.speedrun_mobile_unofficial.R;
 
+import java.util.ArrayList;
+
 public class BoardListAdapter extends BaseAdapter {
 
     private Context context;
-    private String[] ranking;
-    private String[] player;
-    private String[] time;
-    private String[] date;
-    private int[] trophy;
+    private CategoryBoard categoryBoard;
 
-    public BoardListAdapter(Context context, String[] ranking, String[] player, String[]time, String[] date, int[] trophy) {
+    public BoardListAdapter(Context context, CategoryBoard categoryBoard) {
         this.context = context;
-        this.ranking = ranking;
-        this.player = player;
-        this.time = time;
-        this.date = date;
-        this.trophy = trophy;
+        this.categoryBoard = categoryBoard;
     }
 
     @Override
     public int getCount() {
-        return player.length;
+        if(categoryBoard != null) {
+            return categoryBoard.getLeaderboard().size();
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -48,8 +46,7 @@ public class BoardListAdapter extends BaseAdapter {
         ViewHolder holder;
 
         if(convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.leaderboard_list_item, parent, false);
-            System.out.println(convertView);
+            convertView = LayoutInflater.from(context).inflate(R.layout.fragment_leaderboard_list_item, parent, false);
             holder = new ViewHolder();
             holder.rankingText = convertView.findViewById(R.id.ranking);
             holder.playerText = convertView.findViewById(R.id.player);
@@ -63,17 +60,33 @@ public class BoardListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.rankingText.setText(ranking[position]);
-        holder.playerText.setText(player[position]);
-        holder.timeText.setText(time[position]);
-        holder.dateText.setText(date[position]);
-        if(position < trophy.length) {
-            holder.trophyImage.setImageResource(trophy[position]);
-        } else {
+        ArrayList<CategoryBoardItem> leaderboard = categoryBoard.getLeaderboard();
+
+        holder.rankingText.setText(leaderboard.get(position).getRanking());
+        holder.playerText.setText(leaderboard.get(position).getPlayer());
+        holder.timeText.setText(leaderboard.get(position).getTime());
+        holder.dateText.setText(leaderboard.get(position).getDate());
+//        if(position < trophy.length) {
+//            holder.trophyImage.setImageResource(trophy[position]);
+//        } else {
+//            holder.trophyImage.setVisibility(View.INVISIBLE);
+//        }
+
+        if(position > 2) {
             holder.trophyImage.setVisibility(View.INVISIBLE);
         }
 
+        convertView.bringToFront();
+
         return convertView;
+    }
+
+    public CategoryBoard getCategoryBoard() {
+        return categoryBoard;
+    }
+
+    public void setCategoryBoard(CategoryBoard categoryBoard) {
+        this.categoryBoard = categoryBoard;
     }
 
     private static class ViewHolder {
