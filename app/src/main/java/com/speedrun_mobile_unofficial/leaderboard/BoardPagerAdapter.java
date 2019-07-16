@@ -1,10 +1,10 @@
 package com.speedrun_mobile_unofficial.leaderboard;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +16,16 @@ public class BoardPagerAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
-    private final Context context;
+//    private final Context context;
 
-    public BoardPagerAdapter(FragmentManager fm, Context context, AllCategory allCategory) {
+    public BoardPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.context = context;
-
-        for(CategoryBoard board : allCategory.getAllCategoryBoard()) {
+//        this.context = context;
+        for(CategoryBoard board : CategoryBoardModel.getSharedInstance().getAllCategoryBoard()) {
             BoardListFragment fragment = new BoardListFragment();
-            fragment.setCateGoryBoard(board);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("board", board);
+            fragment.setArguments(bundle);
             mFragmentList.add(fragment);
             mFragmentTitleList.add(board.getCategoryName());
         }
@@ -38,11 +39,6 @@ public class BoardPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return mFragmentList.size();
-    }
-
-    public void forceListChange(int position) {
-        BoardListFragment fragment = (BoardListFragment) mFragmentList.get(position);
-        fragment.forceListChange();
     }
 
     @Override
