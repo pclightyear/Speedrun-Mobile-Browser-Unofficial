@@ -31,8 +31,8 @@ public class HomePageActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         HomePagerAdapter adapter = new HomePagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new GamePlaceholderFragment(), getString(R.string.SUBSCRIBED_GAMES));
-        adapter.addFragment(new RecentlyWatchedPlaceholderFragment(), getString(R.string.RECENTLY_WATCHED));
+        adapter.addFragment(new GameFragment(), getString(R.string.SUBSCRIBED_GAMES));
+        adapter.addFragment(new WatchTimeFragment(), getString(R.string.WATCH_TIME));
 
         viewPager.setAdapter(adapter);
     }

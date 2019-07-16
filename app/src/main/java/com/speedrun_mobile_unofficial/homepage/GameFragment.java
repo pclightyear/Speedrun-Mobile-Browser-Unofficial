@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +24,12 @@ import com.speedrun_mobile_unofficial.leaderboard.LeaderBoardActivity;
  * display "subscribed games" or "games" pages at
  * homepage.
  */
-public class GamePlaceholderFragment extends Fragment {
-    private GridView gameGridView;
-    private GamePlaceholderFragmentAdapter gamePlaceholderFragmentAdapter;
-    private Context context;
+public class GameFragment extends Fragment {
+    private RecyclerView gameGridView;
+    private GameGridAdapter gameFragmentAdapter;
     private int[] imageId;
     private String[] gameNames;
-
-    public static final String GAME_NAME = "GAME_NAME";
+    private Context context;
 
     @Override
     public void onAttach(Context context) {
@@ -45,25 +46,16 @@ public class GamePlaceholderFragment extends Fragment {
             imageId[i] = typedArray.getResourceId(i, 0);
         }
         typedArray.recycle();
-        gamePlaceholderFragmentAdapter = new GamePlaceholderFragmentAdapter(context, imageId);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_game, container, false);
         gameGridView = rootView.findViewById(R.id.game_grid);
-        gameGridView.setAdapter(gamePlaceholderFragmentAdapter);
-        gameGridView.setOnItemClickListener(onItemClickListener);
+        gameGridView.setLayoutManager(new GridLayoutManager(getActivity().getBaseContext(), 3));
+
+        gameFragmentAdapter = new GameGridAdapter(context, R.layout.fragment_game_grid_item, imageId, gameNames);
+        gameGridView.setAdapter(gameFragmentAdapter);
         return rootView;
     }
-
-    AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-            Intent intent = new Intent(context, LeaderBoardActivity.class);
-            intent.putExtra(GAME_NAME, gameNames[position]);
-            startActivity(intent);
-        }
-    };
 }
