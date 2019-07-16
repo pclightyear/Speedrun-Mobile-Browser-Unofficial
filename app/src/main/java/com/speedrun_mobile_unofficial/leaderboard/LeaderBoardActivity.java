@@ -5,7 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -21,6 +21,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
     private TabLayout leaderboardTabLayout;
     private String game_name;
 
+    private LinearLayoutManager mlinearLayoutManager;
     private BoardPagerAdapter leaderboardPagerAdapter;
 
     @Override
@@ -32,8 +33,10 @@ public class LeaderBoardActivity extends AppCompatActivity {
         Intent intent = getIntent();
         game_name = intent.getStringExtra(GamePlaceholderFragment.GAME_NAME);
 
-        TextView tt = (TextView) findViewById(R.id.text);
-        tt.setText(game_name);
+        mlinearLayoutManager = new LinearLayoutManager(this);
+
+        TextView title = findViewById(R.id.text);
+        title.setText(game_name);
     }
 
     @Override
@@ -41,58 +44,57 @@ public class LeaderBoardActivity extends AppCompatActivity {
         super.onResume();
         BoardListHelper.fetchLeaderBoardData(getApplicationContext(), game_name, (success, result) -> {
             if(success) {
-                AllCategory allCategory = new AllCategory(result);
-                List results = (ArrayList) result.get("allCategoryBoard");
-                ArrayList<CategoryBoard> allCategoryBoard = new ArrayList<>();
+                this.prepareModel(result);
 
-                if ((results != null ? results.size() : 0) > 0) {
-
-                    for (int i = 0; i < results.size(); i++) {
-                        Map<String, Object> map = (Map) results.get(i);
-
-                        CategoryBoard categoryBoard = new CategoryBoard(map);
-                        List leaderboardresult = (ArrayList) map.get("leaderboard");
-                        ArrayList<CategoryBoardItem> leaderboard = new ArrayList<>();
-
-                        for(int j = 0; j < leaderboardresult.size(); ++j) {
-                            CategoryBoardItem categoryBoardItem = new CategoryBoardItem((Map) leaderboardresult.get(j));
-                            leaderboard.add(categoryBoardItem);
-                        }
-                        categoryBoard.setLeaderboard(leaderboard);
-
-                        allCategoryBoard.add(categoryBoard);
-                    }
-
-                    allCategory.setAllCategoryBoard(allCategoryBoard);
-                }
-
-                leaderboardViewPager = (ViewPager) findViewById(R.id.boardPager);
-                leaderboardPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager(), this, allCategory);
+                leaderboardViewPager = findViewById(R.id.boardPager);
+                leaderboardPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager());
                 leaderboardViewPager.setAdapter(leaderboardPagerAdapter);
 
-                leaderboardTabLayout = (TabLayout) findViewById(R.id.boardTabs);
+                leaderboardTabLayout = findViewById(R.id.boardTabs);
                 leaderboardTabLayout.setupWithViewPager(leaderboardViewPager);
-                leaderboardTabLayout.setOnTabSelectedListener(viewPagerOnTabSelectedListener);
+//                leaderboardTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(leaderboardViewPager) {
+//                    @Override
+//                    public void onTabSelected(TabLayout.Tab tab) {
+//                    }
+//
+//                    @Override
+//                    public void onTabUnselected(TabLayout.Tab tab) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onTabReselected(TabLayout.Tab tab) {
+//
+//                    }
+//                });
             }
         });
     }
 
-    public TabLayout.ViewPagerOnTabSelectedListener viewPagerOnTabSelectedListener = new TabLayout.ViewPagerOnTabSelectedListener(leaderboardViewPager) {
-        @Override
-        public void onTabSelected(TabLayout.Tab tab) {
-            System.out.println(tab.getPosition());
-            leaderboardPagerAdapter.forceListChange(tab.getPosition());
+    private void prepareModel(Map result) {
+        CategoryBoardModel model = new CategoryBoardModel(result);
+        List results = (ArrayList) result.get("allCategoryBoard");
+        ArrayList<CategoryBoard> allCategoryBoard = new ArrayList<>();
+
+        if ((results != null ? results.size() : 0) > 0) {
+            for (int i = 0; i < results.size(); i++) {
+                Map<String, Object> map = (Map) results.get(i);
+
+                CategoryBoard categoryBoard = new CategoryBoard(map);
+                List leaderboardresult = (ArrayList) map.get("leaderboard");
+                ArrayList<CategoryBoardItem> leaderboard = new ArrayList<>();
+
+                for(int j = 0; j < leaderboardresult.size(); ++j) {
+                    CategoryBoardItem categoryBoardItem = new CategoryBoardItem((Map) leaderboardresult.get(j));
+                    leaderboard.add(categoryBoardItem);
+                }
+                categoryBoard.setLeaderboard(leaderboard);
+
+                allCategoryBoard.add(categoryBoard);
+            }
+
+            model.setAllCategoryBoard(allCategoryBoard);
         }
-
-        @Override
-        public void onTabUnselected(TabLayout.Tab tab) {
-
-        }
-
-        @Override
-        public void onTabReselected(TabLayout.Tab tab) {
-
-        }
-    };
-
+        CategoryBoardModel.setSharedInstance(model);
+    }
 }
