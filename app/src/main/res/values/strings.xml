@@ -3,9 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="SUBSCRIBED_GAMES">SUBSCRIBED GAMES</string>
-    <string name="RECENTLY_WATCHED">RECENTLY WATCHED</string>
-    <string name="SUBSCRIBED_GAMES_NOT_FINISHED">Oops, we are trying hard to develop the "subscribed games" feature.</string>
-    <string name="RECENTLY_WATCHED_NOT_FINISHED">Oops, we are trying hard to develop the "recently watched" feature.</string>
+    <string name="WATCH_TIME">WATCH TIME</string>
     <string name="GAME_GRID_VIEW_ITEM_DESCRIPTION">You can choose the game that you are interested with.</string>
     <string name="TROPHY">This image display the trophy.</string>
 </resources>

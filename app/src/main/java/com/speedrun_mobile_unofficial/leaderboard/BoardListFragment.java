@@ -2,6 +2,7 @@ package com.speedrun_mobile_unofficial.leaderboard;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +29,7 @@ public class BoardListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_leaderboard_list, container, false);
         mBoardListView = rootView.findViewById(R.id.boardList);
         mBoardListView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));

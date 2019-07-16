@@ -10,7 +10,8 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.speedrun_mobile_unofficial.R;
-import com.speedrun_mobile_unofficial.homepage.GamePlaceholderFragment;
+import com.speedrun_mobile_unofficial.homepage.GameFragment;
+import com.speedrun_mobile_unofficial.homepage.GameGridAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_leaderboard);
 
         Intent intent = getIntent();
-        game_name = intent.getStringExtra(GamePlaceholderFragment.GAME_NAME);
+        game_name = intent.getStringExtra(GameGridAdapter.GAME_NAME);
 
         mlinearLayoutManager = new LinearLayoutManager(this);
 
