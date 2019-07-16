@@ -1,7 +1,8 @@
 package com.speedrun_mobile_unofficial.leaderboard;
 
-import android.widget.BaseAdapter;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,90 +11,76 @@ import android.widget.TextView;
 
 import com.speedrun_mobile_unofficial.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class BoardListAdapter extends BaseAdapter {
+public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.ViewHolder> {
 
     private Context context;
-    private CategoryBoard categoryBoard;
+    private LayoutInflater mInflater;
+    private int layoutId;
+    private List<CategoryBoardItem> itemList;
 
-    public BoardListAdapter(Context context, CategoryBoard categoryBoard) {
+    public BoardListAdapter(Context context, int layoutId, List<CategoryBoardItem> items) {
         this.context = context;
-        this.categoryBoard = categoryBoard;
+        this.mInflater = LayoutInflater.from(context);
+        this.layoutId = layoutId;
+        this.itemList = items;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = mInflater.inflate(layoutId, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public int getCount() {
-        if(categoryBoard != null) {
-            return categoryBoard.getLeaderboard().size();
-        } else {
-            return 0;
-        }
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        System.out.println(position);
+        holder.bind(position);
     }
 
     @Override
-    public Object getItem(int i) {
-        return null;
+    public int getItemCount() {
+        return itemList.size();
     }
 
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
+    class ViewHolder extends RecyclerView.ViewHolder {
+        final ImageView trophyImage;
+        final TextView rankingText;
+        final TextView playerText;
+        final TextView timeText;
+        final TextView dateText;
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-
-        if(convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.fragment_leaderboard_list_item, parent, false);
-            holder = new ViewHolder();
-            holder.rankingText = convertView.findViewById(R.id.ranking);
-            holder.playerText = convertView.findViewById(R.id.player);
-            holder.timeText = convertView.findViewById(R.id.time);
-            holder.dateText = convertView.findViewById(R.id.date);
-            holder.trophyImage = convertView.findViewById(R.id.trophy);
-
-            convertView.setTag(holder);
-        }
-        else {
-            holder = (ViewHolder) convertView.getTag();
+        ViewHolder(View itemView) {
+            super(itemView);
+            this.trophyImage = itemView.findViewById(R.id.trophy);
+            this.rankingText = itemView.findViewById(R.id.ranking);
+            this.playerText = itemView.findViewById(R.id.player);
+            this.timeText = itemView.findViewById(R.id.time);
+            this.dateText = itemView.findViewById(R.id.date);
         }
 
-        ArrayList<CategoryBoardItem> leaderboard = categoryBoard.getLeaderboard();
+        void bind(final int position) {
+            CategoryBoardItem item = itemList.get(position);
 
-        holder.rankingText.setText(leaderboard.get(position).getRanking());
-        holder.playerText.setText(leaderboard.get(position).getPlayer());
-        holder.timeText.setText(leaderboard.get(position).getTime());
-        holder.dateText.setText(leaderboard.get(position).getDate());
-//        if(position < trophy.length) {
-//            holder.trophyImage.setImageResource(trophy[position]);
-//        } else {
-//            holder.trophyImage.setVisibility(View.INVISIBLE);
-//        }
+            rankingText.setText(item.getRanking());
+            playerText.setText(item.getPlayer());
+            timeText.setText(item.getTime());
+            dateText.setText(item.getDate());
 
-        if(position > 2) {
-            holder.trophyImage.setVisibility(View.INVISIBLE);
+            trophyImage.setVisibility(View.INVISIBLE);
+
+            if (position <= 2) {
+                trophyImage.setVisibility(View.VISIBLE);
+                if (position == 0) {
+                    trophyImage.setImageResource(R.drawable.first);
+                } else if (position == 1) {
+                    trophyImage.setImageResource(R.drawable.second);
+                } else {
+                    trophyImage.setImageResource(R.drawable.third);
+                }
+            }
         }
-
-        convertView.bringToFront();
-
-        return convertView;
-    }
-
-    public CategoryBoard getCategoryBoard() {
-        return categoryBoard;
-    }
-
-    public void setCategoryBoard(CategoryBoard categoryBoard) {
-        this.categoryBoard = categoryBoard;
-    }
-
-    private static class ViewHolder {
-        ImageView trophyImage;
-        TextView rankingText;
-        TextView playerText;
-        TextView timeText;
-        TextView dateText;
     }
 }
