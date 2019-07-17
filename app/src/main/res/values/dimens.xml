@@ -11,4 +11,6 @@
     <dimen name="leaderboard_item_margin_vertical">8dp</dimen>
     <dimen name="leaderboard_item_margin_horizontal">16dp</dimen>
     <dimen name="leaderboard_ranking_padding_start">7dp</dimen>
+
+    <dimen name="watch_time_chart_marker_font_size">12sp</dimen>
 </resources>
