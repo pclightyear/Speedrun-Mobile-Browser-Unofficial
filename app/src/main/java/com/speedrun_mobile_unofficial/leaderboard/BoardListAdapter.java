@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.speedrun_mobile_unofficial.R;
 
 import java.util.List;
@@ -19,12 +20,20 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.View
     private LayoutInflater mInflater;
     private int layoutId;
     private List<CategoryBoardItem> itemList;
+    private String firstTrophyUri;
+    private String secondTrophyUri;
+    private String thirdTrophyUri;
+    private String fourthTrophyUri;
 
     public BoardListAdapter(Context context, int layoutId, List<CategoryBoardItem> items) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.layoutId = layoutId;
         this.itemList = items;
+        this.firstTrophyUri = CategoryBoardModel.getSharedInstance().getFirstTrophyUri();
+        this.secondTrophyUri = CategoryBoardModel.getSharedInstance().getSecondTrophyUri();
+        this.thirdTrophyUri = CategoryBoardModel.getSharedInstance().getThirdTrophyUri();
+        this.fourthTrophyUri = CategoryBoardModel.getSharedInstance().getFourthTrophyUri();
     }
 
     @NonNull
@@ -72,13 +81,17 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.View
 
             if (position <= 2) {
                 trophyImage.setVisibility(View.VISIBLE);
-                if (position == 0) {
-                    trophyImage.setImageResource(R.drawable.first);
-                } else if (position == 1) {
-                    trophyImage.setImageResource(R.drawable.second);
-                } else {
-                    trophyImage.setImageResource(R.drawable.third);
+                if (position == 0 && firstTrophyUri != null) {
+                    Glide.with(context).load(firstTrophyUri).into(trophyImage);
+                } else if (position == 1 && secondTrophyUri != null) {
+                    Glide.with(context).load(secondTrophyUri).into(trophyImage);
+                } else if (position == 2 && thirdTrophyUri != null) {
+                    Glide.with(context).load(thirdTrophyUri).into(trophyImage);
                 }
+            }
+            if (fourthTrophyUri != null){
+                trophyImage.setVisibility(View.VISIBLE);
+                Glide.with(context).load(firstTrophyUri).into(trophyImage);
             }
         }
     }

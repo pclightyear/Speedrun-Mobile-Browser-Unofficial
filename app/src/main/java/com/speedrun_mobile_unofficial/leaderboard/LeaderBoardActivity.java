@@ -22,7 +22,6 @@ public class LeaderBoardActivity extends AppCompatActivity {
     private TabLayout leaderboardTabLayout;
     private String game_name;
 
-    private LinearLayoutManager mlinearLayoutManager;
     private BoardPagerAdapter leaderboardPagerAdapter;
 
     @Override
@@ -33,19 +32,23 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         game_name = intent.getStringExtra(GameGridAdapter.GAME_NAME);
-
-        mlinearLayoutManager = new LinearLayoutManager(this);
-
-        TextView title = findViewById(R.id.text);
-        title.setText(game_name);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        BoardListHelper.fetchGameData(getApplicationContext(), game_name, ((success, result) -> {
+            if(success) {
+                this.prepareGameModel(result);
+
+                TextView title = findViewById(R.id.text);
+                title.setText(CategoryBoardModel.getSharedInstance().getGameName());
+            }
+        }));
+
         BoardListHelper.fetchLeaderBoardData(getApplicationContext(), game_name, (success, result) -> {
             if(success) {
-                this.prepareModel(result);
+                this.prepareBoardModel(result);
 
                 leaderboardViewPager = findViewById(R.id.boardPager);
                 leaderboardPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager());
@@ -72,8 +75,21 @@ public class LeaderBoardActivity extends AppCompatActivity {
         });
     }
 
-    private void prepareModel(Map result) {
+    private void prepareGameModel(Map result) {
         CategoryBoardModel model = new CategoryBoardModel(result);
+        if(CategoryBoardModel.getSharedInstance() != null) {
+            model.setAllCategoryBoard(CategoryBoardModel.getSharedInstance().getAllCategoryBoard());
+        }
+        CategoryBoardModel.setSharedInstance(model);
+    }
+
+    private void prepareBoardModel(Map result) {
+        CategoryBoardModel model;
+        if(CategoryBoardModel.getSharedInstance() == null) {
+            model = new CategoryBoardModel(result);
+        } else {
+            model = CategoryBoardModel.getSharedInstance();
+        }
         List results = (ArrayList) result.get("allCategoryBoard");
         ArrayList<CategoryBoard> allCategoryBoard = new ArrayList<>();
 
@@ -96,6 +112,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
             model.setAllCategoryBoard(allCategoryBoard);
         }
+
         CategoryBoardModel.setSharedInstance(model);
     }
 }

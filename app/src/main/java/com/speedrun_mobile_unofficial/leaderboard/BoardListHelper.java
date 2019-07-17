@@ -23,7 +23,7 @@ public class BoardListHelper {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             try {
-                callback.onResponse(true, parseJson(response, game));
+                callback.onResponse(true, parseRecordJson(response));
             } catch (JSONException e) {
 //                Log.e(getClass().getName(), e.getLocalizedMessage());
             }
@@ -34,11 +34,25 @@ public class BoardListHelper {
         RequestQueueSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
 
-    public static Map<String, Object> parseJson(JSONObject jsonObject, String game) throws JSONException {
+    public static void fetchGameData(final Context context, String game, final APICallback callback) {
+        String url = String.format("https://www.speedrun.com/api/v1/games/%s", game);
+        System.out.println(url);
 
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            try {
+                callback.onResponse(true, parseGameJson((response)));
+            } catch (JSONException e) {
+
+            }
+        }, error -> {
+           callback.onResponse(false, null);
+        });
+
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest);
+    }
+
+    public static Map<String, Object> parseRecordJson(JSONObject jsonObject) throws JSONException {
         Map<String, Object> map = new HashMap<>();
-        map.put("gameName", game);
-
         JSONArray data = jsonObject.getJSONArray("data");
         ArrayList<Map<String, Object>> allCategoryBoard = new ArrayList<>();
 
@@ -71,6 +85,37 @@ public class BoardListHelper {
 
 
         map.put("allCategoryBoard", allCategoryBoard);
+
+        return map;
+    }
+
+    public static Map<String, Object> parseGameJson(JSONObject jsonObject) throws JSONException {
+        Map<String, Object> map = new HashMap<>();
+        JSONObject data = jsonObject.getJSONObject("data");
+
+        JSONObject gameNames = data.getJSONObject("names");
+        if(!gameNames.isNull("international")) {
+            map.put("gameName", gameNames.getString("international"));
+        } else if(!gameNames.isNull("japanese")) {
+            map.put("gameName", gameNames.getString("japanese"));
+        } else if(!gameNames.isNull("twitch")) {
+            map.put("gameName", gameNames.getString("twitch"));
+        }
+
+
+        JSONObject assets = data.getJSONObject("assets");
+        if(!assets.isNull("trophy-1st")) {
+            map.put("trophy-1st", assets.getJSONObject("trophy-1st").getString("uri"));
+        }
+        if(!assets.isNull("trophy-2nd")) {
+            map.put("trophy-2nd", assets.getJSONObject("trophy-2nd").getString("uri"));
+        }
+        if(!assets.isNull("trophy-3rd")) {
+            map.put("trophy-3rd", assets.getJSONObject("trophy-3rd").getString("uri"));
+        }
+        if(!assets.isNull("trophy-4th")) {
+            map.put("trophy-4th", assets.getJSONObject("trophy-4th").getString("uri"));
+        }
 
         return map;
     }
