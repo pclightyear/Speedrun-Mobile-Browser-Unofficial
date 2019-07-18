@@ -18,7 +18,7 @@ import java.util.Map;
 public class BoardListHelper {
 
     public static void fetchLeaderBoardData(final Context context, String game, final APICallback callback) {
-        String url = String.format("https://www.speedrun.com/api/v1/games/%s/records?top=10", game);
+        String url = String.format("https://www.speedrun.com/api/v1/games/%s/records?top=200&embed=players", game);
         System.out.println(url);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
@@ -35,7 +35,7 @@ public class BoardListHelper {
     }
 
     public static void fetchGameData(final Context context, String game, final APICallback callback) {
-        String url = String.format("https://www.speedrun.com/api/v1/games/%s", game);
+        String url = String.format("https://www.speedrun.com/api/v1/games/%s?embed=platforms", game);
         System.out.println(url);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
@@ -62,18 +62,43 @@ public class BoardListHelper {
 
             ArrayList<Map<String, Object>> leaderboard = new ArrayList<>();
             JSONArray runs = data.getJSONObject(i).getJSONArray("runs");
+            JSONArray players = data.getJSONObject(i).getJSONObject("players").getJSONArray("data");
 
             for(int j = 0; j < runs.length(); ++j) {
                 Map<String, Object> leaderboardItemMap = new HashMap<>();
                 leaderboardItemMap.put("ranking", getRankingString(runs.getJSONObject(j).getInt("place")));
 
                 JSONObject run = runs.getJSONObject(j).getJSONObject("run");
+                JSONObject playerInRun = run.getJSONArray("players").getJSONObject(0);
+                JSONObject playerInfo = players.getJSONObject(j);
 
-                if(run.getJSONArray("players").getJSONObject(0).getString("rel").equals("user")) {
-                    leaderboardItemMap.put("player", run.getJSONArray("players").getJSONObject(0).getString("id"));
-                } else if(run.getJSONArray("players").getJSONObject(0).getString("rel").equals("guest")) {
-                    leaderboardItemMap.put("player", run.getJSONArray("players").getJSONObject(0).getString("name"));
+                if(("user").equals(playerInRun.getString("rel"))) {
+                    if(playerInRun.getString("id").equals(playerInfo.getString("id"))) {
+                        JSONObject names = playerInfo.getJSONObject("names");
+                        if(!names.isNull("international")) {
+                            leaderboardItemMap.put("player", names.getString("international"));
+                        } else if(!names.isNull("japanese")) {
+                            leaderboardItemMap.put("player", names.getString("japanese"));
+                        }
+                    }
+                } else if(("guest").equals(playerInRun.getString("rel"))) {
+                    if(playerInfo.getString("name").equals(playerInRun.getString("name"))) {
+                        leaderboardItemMap.put("player", playerInfo.getString("name"));
+                    }
                 }
+
+                if(playerInfo.has("name-style")) {
+                    JSONObject nameStyle = playerInfo.getJSONObject("name-style");
+                    if(("solid").equals(nameStyle.getString("style"))) {
+                        leaderboardItemMap.put("nameStyle", "solid");
+                        leaderboardItemMap.put("color", nameStyle.getJSONObject("color").getString("dark"));
+                    } else if(("gradient").equals(nameStyle.getString("style"))) {
+                        leaderboardItemMap.put("nameStyle", "gradient");
+                        leaderboardItemMap.put("colorFrom", nameStyle.getJSONObject("color-from").getString("dark"));
+                        leaderboardItemMap.put("colorTo", nameStyle.getJSONObject("color-to").getString("dark"));
+                    }
+                }
+
                 leaderboardItemMap.put("time", getTimeString(run.getJSONObject("times").getDouble("primary_t")));
                 leaderboardItemMap.put("date", run.getString("date"));
                 leaderboard.add(leaderboardItemMap);
@@ -102,6 +127,16 @@ public class BoardListHelper {
             map.put("gameName", gameNames.getString("twitch"));
         }
 
+        map.put("coverUri", data.getJSONObject("assets").getJSONObject("cover-small").getString("uri"));
+
+        JSONArray platforms = data.getJSONObject("platforms").getJSONArray("data");
+        ArrayList<String> platformNames = new ArrayList<>();
+        for(int i = 0; i < platforms.length(); ++i) {
+            platformNames.add(platforms.getJSONObject(i).getString("name"));
+        }
+        map.put("platforms", String.join(", ", platformNames));
+
+        map.put("releaseDate", data.getString("release-date"));
 
         JSONObject assets = data.getJSONObject("assets");
         if(!assets.isNull("trophy-1st")) {
@@ -121,14 +156,16 @@ public class BoardListHelper {
     }
 
     private static String getRankingString(int place) {
-        if(place == 1) {
-            return "1st";
-        } else if(place == 2) {
-            return "2nd";
-        } else if(place == 3) {
-            return "3rd";
-        } else {
+        if(place == 0) {
+            return "----";
+        } else if(place % 10 == 1 && place % 100 != 11) {
             return String.format("%dst", place);
+        } else if(place % 10 == 2 && place % 100 != 12) {
+            return String.format("%dnd", place);
+        } else if(place % 10 == 3 && place % 100 != 13) {
+            return String.format("%drd", place);
+        } else {
+            return String.format("%dth", place);
         }
     }
 

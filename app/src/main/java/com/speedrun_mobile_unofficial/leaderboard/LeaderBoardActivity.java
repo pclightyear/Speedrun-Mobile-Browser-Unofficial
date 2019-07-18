@@ -5,12 +5,17 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.speedrun_mobile_unofficial.R;
-import com.speedrun_mobile_unofficial.homepage.GameFragment;
 import com.speedrun_mobile_unofficial.homepage.GameGridAdapter;
 
 import java.util.ArrayList;
@@ -20,6 +25,7 @@ import java.util.Map;
 public class LeaderBoardActivity extends AppCompatActivity {
     private ViewPager leaderboardViewPager;
     private TabLayout leaderboardTabLayout;
+    private TextView title;
     private String game_name;
 
     private BoardPagerAdapter leaderboardPagerAdapter;
@@ -32,6 +38,11 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         game_name = intent.getStringExtra(GameGridAdapter.GAME_NAME);
+
+        Toolbar mToolbar = findViewById(R.id.leaderboard_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override
@@ -41,8 +52,17 @@ public class LeaderBoardActivity extends AppCompatActivity {
             if(success) {
                 this.prepareGameModel(result);
 
-                TextView title = findViewById(R.id.text);
+                title = findViewById(R.id.text);
                 title.setText(CategoryBoardModel.getSharedInstance().getGameName());
+
+                ImageView coverImage = findViewById(R.id.info_game_cover_image);
+                Glide.with(this).load(CategoryBoardModel.getSharedInstance().getCoverImageUri()).into(coverImage);
+
+                TextView platforms = findViewById(R.id.platforms);
+                platforms.setText(CategoryBoardModel.getSharedInstance().getPlatforms());
+
+                TextView releaseDate = findViewById(R.id.release_date);
+                releaseDate.setText(CategoryBoardModel.getSharedInstance().getReleaseDate());
             }
         }));
 
@@ -73,6 +93,40 @@ public class LeaderBoardActivity extends AppCompatActivity {
 //                });
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_leaderboard, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_subscribe:
+                if(!item.isChecked()) {
+                    item.setChecked(true);
+                    item.setIcon(R.drawable.star_26);
+                    Toast.makeText(this, String.format("Subscribe to %s", title.getText().toString()), Toast.LENGTH_LONG).show();
+                } else {
+                    item.setChecked(false);
+                    item.setIcon(R.drawable.hollow_star_26);
+                    Toast.makeText(this, String.format("Unsubscribe to %s", title.getText().toString()), Toast.LENGTH_LONG).show();
+                }
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void prepareGameModel(Map result) {

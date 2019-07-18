@@ -1,7 +1,5 @@
 package com.speedrun_mobile_unofficial.leaderboard;
 
-import android.content.Context;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
@@ -9,6 +7,9 @@ import java.util.Map;
 public class CategoryBoardModel implements Serializable {
     private static CategoryBoardModel sharedInstance;
     private String gameName;
+    private String coverImageUri;
+    private String platforms;
+    private String releaseDate;
     private String firstTrophyUri;
     private String secondTrophyUri;
     private String thirdTrophyUri;
@@ -18,6 +19,15 @@ public class CategoryBoardModel implements Serializable {
     public CategoryBoardModel(Map input) {
         if(input.get("gameName") != null) {
             this.gameName = (String) input.get("gameName");
+        }
+        if(input.get("coverUri") != null) {
+            this.coverImageUri = (String) input.get("coverUri");
+        }
+        if(input.get("platforms") != null) {
+            this.platforms = (String) input.get("platforms");
+        }
+        if(input.get("releaseDate") != null) {
+            this.releaseDate = (String) input.get("releaseDate");
         }
         if(input.get("trophy-1st") != null) {
             this.firstTrophyUri = (String) input.get("trophy-1st");
@@ -43,6 +53,18 @@ public class CategoryBoardModel implements Serializable {
 
     public String getGameName() {
         return gameName;
+    }
+
+    public String getCoverImageUri() {
+        return coverImageUri;
+    }
+
+    public String getPlatforms() {
+        return platforms;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
     public String getFirstTrophyUri() {

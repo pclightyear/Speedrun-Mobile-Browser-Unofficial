@@ -1,6 +1,9 @@
 package com.speedrun_mobile_unofficial.leaderboard;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -74,6 +77,16 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.View
 
             rankingText.setText(item.getRanking());
             playerText.setText(item.getPlayer());
+
+            if(("solid").equals(item.getNameStyle())) {
+                playerText.setTextColor(Color.parseColor(item.getColor()));
+            } else if(("gradient").equals(item.getNameStyle())) {
+                int colorFrom = Color.parseColor(item.getColorFrom());
+                int colorTo = Color.parseColor(item.getColorTo());
+                Shader shader = new LinearGradient(0, 0, playerText.getHeight(), playerText.getTextSize(), colorFrom, colorTo, Shader.TileMode.CLAMP);
+                playerText.getPaint().setShader(shader);
+            }
+
             timeText.setText(item.getTime());
             dateText.setText(item.getDate());
 
