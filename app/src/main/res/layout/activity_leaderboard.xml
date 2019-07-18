@@ -5,16 +5,82 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/text"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/leaderboard_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="30sp"/>
+        android:elevation="4dp"
+        android:theme="@style/Theme.AppCompat"
+        app:popupTheme="@style/Theme.AppCompat">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:singleLine="true"
+            android:textSize="@dimen/leaderboard_bar_text"
+            android:textStyle="bold"
+            android:text="Testing Game Name" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/info_game_cover_image"
+        android:layout_below="@+id/leaderboard_toolbar"
+        android:layout_width="@dimen/leaderboard_cover_image_width"
+        android:layout_height="@dimen/leaderboard_cover_image_height"
+        />
+
+    <TextView
+        android:id="@+id/platform_title"
+        android:layout_below="@+id/leaderboard_toolbar"
+        android:layout_alignRight="@+id/release_date_title"
+        android:textSize="@dimen/leaderboard_text_small"
+        android:text="@string/leader_board_platform_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/release_date_title"
+        android:layout_below="@+id/platforms"
+        android:layout_toEndOf="@+id/info_game_cover_image"
+        android:paddingStart="@dimen/leaderboard_platform_release_date_padding_start"
+        android:textSize="@dimen/leaderboard_text_small"
+        android:text="@string/leader_board_release_date_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/platforms"
+        android:layout_below="@+id/leaderboard_toolbar"
+        android:layout_toEndOf="@+id/platform_title"
+        android:paddingStart="@dimen/leaderboard_platform_release_date_padding_start"
+        android:paddingEnd="0dp"
+        android:textSize="@dimen/leaderboard_text_small"
+        android:text="PC, Android, iOS"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/release_date"
+        android:layout_below="@+id/platforms"
+        android:layout_toEndOf="@+id/release_date_title"
+        android:paddingStart="@dimen/leaderboard_platform_release_date_padding_start"
+        android:paddingEnd="0dp"
+        android:textSize="@dimen/leaderboard_text_small"
+        android:text="2099-13-32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/boardTabs"
-        android:layout_below="@+id/text"
+        android:layout_below="@+id/info_game_cover_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foregroundGravity="top"
@@ -30,6 +96,5 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
     </android.support.v4.view.ViewPager>
-
 
 </RelativeLayout>
