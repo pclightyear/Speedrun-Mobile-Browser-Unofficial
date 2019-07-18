@@ -5,6 +5,12 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
 
+    <dimen name="leaderboard_bar_text">20sp</dimen>
+
+    <dimen name="leaderboard_cover_image_width">64dp</dimen>
+    <dimen name="leaderboard_cover_image_height">90dp</dimen>
+    <dimen name="leaderboard_platform_release_date_padding_start">13dp</dimen>
+
     <dimen name="leaderboard_text_large">18sp</dimen>
     <dimen name="leaderboard_text_medieum">14sp</dimen>
     <dimen name="leaderboard_text_small">12sp</dimen>

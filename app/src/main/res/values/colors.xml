@@ -5,4 +5,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorWatchTimeChartLine">#51A1AD</color>
     <color name="colorWatchTimeChartBackground">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
 </resources>
