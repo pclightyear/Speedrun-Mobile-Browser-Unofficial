@@ -53,7 +53,7 @@ public class GameGridAdapter extends RecyclerView.Adapter<GameGridAdapter.ViewHo
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.gameCover = itemView.findViewById(R.id.game_cover_image);
+            this.gameCover = itemView.findViewById(R.id.home_game_cover_image);
             itemView.setOnClickListener(this);
         }
 
