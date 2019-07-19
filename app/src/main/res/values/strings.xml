@@ -2,6 +2,8 @@
     <string name="app_name">Speedrun Mobile Browser (Unofficial)</string>
     <string name="action_settings">Setting</string>
 
+    <string name="search_hint">Search a game</string>
+
     <string name="leader_board_action_subscribe">subscribe</string>
     <string name="leader_board_action_unsubscribe">unsubscribe</string>
     <string name="leader_board_platform_title">Platforms</string>
@@ -12,4 +14,5 @@
 
     <string name="GAME_GRID_VIEW_ITEM_DESCRIPTION">You can choose the game that you are interested with.</string>
     <string name="TROPHY">This image display the trophy.</string>
+    <string name="title_activity_search">SearchActivity</string>
 </resources>
