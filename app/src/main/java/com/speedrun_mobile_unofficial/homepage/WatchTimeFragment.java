@@ -4,11 +4,8 @@ import android.app.usage.UsageEvents;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.v4.app.Fragment;
-import android.system.Os;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +13,6 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.MarkerImage;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -29,11 +25,8 @@ import com.speedrun_mobile_unofficial.R;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -49,7 +42,7 @@ public class WatchTimeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_watch_time, container, false);
         mWatchTimeChart = (LineChart) rootView.findViewById(R.id.watchtimechart);
         lineChartSetup();
-//        displayUsageStats();
+        displayUsageStats();
 
         return rootView;
     }
@@ -83,7 +76,7 @@ public class WatchTimeFragment extends Fragment {
 
         LineData lineData = new LineData(dataSet);
         mWatchTimeChart.setData(lineData);
-//        mWatchTimeChart.setMarker(new mMarkerView(getContext(), R.layout.fragment_watch_time_chart_marker_view));
+        mWatchTimeChart.setMarker(new mMarkerView(getContext(), R.layout.fragment_watch_time_chart_marker_view));
 
         mWatchTimeChart.setBackgroundColor(getResources().getColor(R.color.colorWatchTimeChartBackground));
         mWatchTimeChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -110,24 +103,17 @@ public class WatchTimeFragment extends Fragment {
     }
 
     private void displayUsageStats() {
-        System.out.println("stats");
         UsageStatsManager usageStats = (UsageStatsManager) getActivity().getSystemService(getActivity().getBaseContext().USAGE_STATS_SERVICE);
-        System.out.println(usageStats);
         final long weekTimeMillis = 1000 * 60 * 60 * 24 * 7;
-        System.out.println(weekTimeMillis);
         UsageEvents events = usageStats.queryEventsForSelf(System.currentTimeMillis() - weekTimeMillis, System.currentTimeMillis());
 
-        while(events.hasNextEvent()) {
-
+        List<UsageStats> usageStatsList = usageStats.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, System.currentTimeMillis() - weekTimeMillis, System.currentTimeMillis());
+        System.out.println(usageStatsList.size());
+        for(UsageStats stats : usageStatsList) {
+            if(stats.getPackageName().equals("com.speedrun_mobile_unofficial")) {
+                System.out.println(stats.getTotalTimeInForeground());
+            }
         }
-//        List<UsageStats> usageStatsList = usageStats.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, System.currentTimeMillis() - weekTimeMillis, System.currentTimeMillis());
-//        System.out.println(usageStatsList.size());
-//        for(UsageStats stats : usageStatsList) {
-//            if(stats.getPackageName().equals("com.speedrun_mobile_unofficial")) {
-//                System.out.println(stats.getPackageName());
-//                System.out.println(stats.getTotalTimeInForeground());
-//            }
-//        }
 
     }
 
