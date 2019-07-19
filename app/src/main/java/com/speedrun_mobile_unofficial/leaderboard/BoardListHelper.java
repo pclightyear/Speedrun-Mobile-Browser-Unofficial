@@ -51,7 +51,7 @@ public class BoardListHelper {
         RequestQueueSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
 
-    public static Map<String, Object> parseRecordJson(JSONObject jsonObject) throws JSONException {
+    private static Map<String, Object> parseRecordJson(JSONObject jsonObject) throws JSONException {
         Map<String, Object> map = new HashMap<>();
         JSONArray data = jsonObject.getJSONArray("data");
         ArrayList<Map<String, Object>> allCategoryBoard = new ArrayList<>();
@@ -114,7 +114,7 @@ public class BoardListHelper {
         return map;
     }
 
-    public static Map<String, Object> parseGameJson(JSONObject jsonObject) throws JSONException {
+    private static Map<String, Object> parseGameJson(JSONObject jsonObject) throws JSONException {
         Map<String, Object> map = new HashMap<>();
         JSONObject data = jsonObject.getJSONObject("data");
 
