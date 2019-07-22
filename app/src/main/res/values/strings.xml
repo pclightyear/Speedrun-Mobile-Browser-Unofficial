@@ -3,6 +3,7 @@
     <string name="action_settings">Setting</string>
 
     <string name="search_hint">Search a game</string>
+    <string name="search_no_result">No result</string>
 
     <string name="leader_board_action_subscribe">subscribe</string>
     <string name="leader_board_action_unsubscribe">unsubscribe</string>

@@ -21,9 +21,17 @@
             android:singleLine="true"
             android:textSize="@dimen/leaderboard_bar_text"
             android:textStyle="bold"
-            android:text="Testing Game Name" />
+            android:text="Loading..." />
 
     </android.support.v7.widget.Toolbar>
+
+    <ProgressBar
+        android:id="@+id/leaderboard_progress_bar_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/leaderboard_toolbar"
+        />
 
     <ImageView
         android:id="@+id/info_game_cover_image"
@@ -35,9 +43,10 @@
     <TextView
         android:id="@+id/platform_title"
         android:layout_below="@+id/leaderboard_toolbar"
-        android:layout_alignRight="@+id/release_date_title"
+        android:layout_alignEnd="@+id/release_date_title"
         android:textSize="@dimen/leaderboard_text_small"
         android:text="@string/leader_board_platform_title"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -47,8 +56,10 @@
         android:layout_below="@+id/platforms"
         android:layout_toEndOf="@+id/info_game_cover_image"
         android:paddingStart="@dimen/leaderboard_platform_release_date_padding_start"
+        android:paddingEnd="0dp"
         android:textSize="@dimen/leaderboard_text_small"
         android:text="@string/leader_board_release_date_title"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -60,8 +71,6 @@
         android:paddingStart="@dimen/leaderboard_platform_release_date_padding_start"
         android:paddingEnd="0dp"
         android:textSize="@dimen/leaderboard_text_small"
-        android:text="PC, Android, iOS"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -73,7 +82,6 @@
         android:paddingStart="@dimen/leaderboard_platform_release_date_padding_start"
         android:paddingEnd="0dp"
         android:textSize="@dimen/leaderboard_text_small"
-        android:text="2099-13-32"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -87,6 +95,15 @@
         app:tabMode="scrollable">
 
     </android.support.design.widget.TabLayout>
+
+    <ProgressBar
+        android:id="@+id/leaderboard_progress_bar_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/boardTabs"
+        android:visibility="invisible"
+        />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/boardPager"

@@ -10,6 +10,7 @@
         android:title="@string/leader_board_action_subscribe"
         android:orderInCategory="100"
         android:checkable="true"
+        android:visible="false"
         app:showAsAction="always" />
 
 </menu>
