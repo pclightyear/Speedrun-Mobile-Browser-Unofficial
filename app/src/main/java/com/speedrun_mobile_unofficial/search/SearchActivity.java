@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.speedrun_mobile_unofficial.R;
 
@@ -41,6 +43,11 @@ public class SearchActivity extends AppCompatActivity {
 
                 mSearchListAdapter = new SearchListAdapter(this, R.layout.activity_search_list_item, model.getSearchList());
                 mSearchlistView.setAdapter(mSearchListAdapter);
+
+                findViewById(R.id.search_progress_bar).setVisibility(ProgressBar.INVISIBLE);
+                if(model.getSearchList() == null) {
+                    findViewById(R.id.search_no_result_text).setVisibility(TextView.VISIBLE);
+                }
             }
         }));
     }

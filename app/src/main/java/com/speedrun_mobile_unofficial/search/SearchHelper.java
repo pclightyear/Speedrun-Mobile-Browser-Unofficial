@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.speedrun_mobile_unofficial.APICallback;
-import com.speedrun_mobile_unofficial.RequestQueueSingleton;
+import com.speedrun_mobile_unofficial.entities.APICallback;
+import com.speedrun_mobile_unofficial.entities.RequestQueueSingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
