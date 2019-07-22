@@ -7,7 +7,7 @@ import java.util.Map;
 public class CategoryBoardModel implements Serializable {
     private static CategoryBoardModel sharedInstance;
     private String gameName;
-    private String coverImageUri;
+    private String coverImageSmallUri;
     private String platforms;
     private String releaseDate;
     private String firstTrophyUri;
@@ -20,8 +20,8 @@ public class CategoryBoardModel implements Serializable {
         if(input.get("gameName") != null) {
             this.gameName = (String) input.get("gameName");
         }
-        if(input.get("coverUri") != null) {
-            this.coverImageUri = (String) input.get("coverUri");
+        if(input.get("coverSmallUri") != null) {
+            this.coverImageSmallUri = (String) input.get("coverSmallUri");
         }
         if(input.get("platforms") != null) {
             this.platforms = (String) input.get("platforms");
@@ -55,8 +55,8 @@ public class CategoryBoardModel implements Serializable {
         return gameName;
     }
 
-    public String getCoverImageUri() {
-        return coverImageUri;
+    public String getCoverImageSmallUri() {
+        return coverImageSmallUri;
     }
 
     public String getPlatforms() {

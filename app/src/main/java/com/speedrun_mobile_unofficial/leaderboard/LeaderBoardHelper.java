@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.speedrun_mobile_unofficial.APICallback;
-import com.speedrun_mobile_unofficial.RequestQueueSingleton;
+import com.speedrun_mobile_unofficial.entities.APICallback;
+import com.speedrun_mobile_unofficial.entities.RequestQueueSingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BoardListHelper {
+public class LeaderBoardHelper {
 
     public static void fetchLeaderBoardData(final Context context, String game, final APICallback callback) {
         String url = String.format("https://www.speedrun.com/api/v1/games/%s/records?top=200&embed=players", game);
@@ -127,7 +127,7 @@ public class BoardListHelper {
             map.put("gameName", gameNames.getString("twitch"));
         }
 
-        map.put("coverUri", data.getJSONObject("assets").getJSONObject("cover-small").getString("uri"));
+        map.put("coverSmallUri", data.getJSONObject("assets").getJSONObject("cover-small").getString("uri"));
 
         JSONArray platforms = data.getJSONObject("platforms").getJSONArray("data");
         ArrayList<String> platformNames = new ArrayList<>();
