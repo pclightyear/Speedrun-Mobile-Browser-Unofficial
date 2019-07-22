@@ -1,4 +1,4 @@
-package com.speedrun_mobile_unofficial;
+package com.speedrun_mobile_unofficial.entities;
 
 import android.content.Context;
 import android.graphics.Bitmap;
