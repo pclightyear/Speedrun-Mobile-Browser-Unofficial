@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.speedrun_mobile_unofficial.R;
 import com.speedrun_mobile_unofficial.leaderboard.LeaderBoardActivity;
 
@@ -16,16 +19,16 @@ public class GameGridAdapter extends RecyclerView.Adapter<GameGridAdapter.ViewHo
 
     private Context context;
     private LayoutInflater mInflater;
-    private final int[] imageId;
-    private final String[] gameNames;
+    private Object[] gameNames;
     private int layoutId;
 
     public static final String GAME_NAME = "GAME_NAME";
 
-    public GameGridAdapter(Context context, int layoutId, int[] imageId, String[] gameNames) {
+    public GameGridAdapter() { }
+
+    public GameGridAdapter(Context context, int layoutId, Object[] gameNames) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
-        this.imageId = imageId;
         this.layoutId = layoutId;
         this.gameNames = gameNames;
     }
@@ -44,22 +47,31 @@ public class GameGridAdapter extends RecyclerView.Adapter<GameGridAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return gameNames.length;
+        return gameNames == null ? 0 : gameNames.length;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final ImageView gameCover;
         String gameName;
+        CircularProgressDrawable placeholder;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.gameCover = itemView.findViewById(R.id.home_game_cover_image);
+            placeholder = new CircularProgressDrawable(context);
+            placeholder.setStrokeWidth(5f);
+            placeholder.setCenterRadius(30f);
             itemView.setOnClickListener(this);
         }
 
         void bind(final int position) {
-            this.gameName = gameNames[position];
-            gameCover.setImageResource(imageId[position]);
+            this.gameName = (String) gameNames[position];
+            String url = String.format("https://www.speedrun.com/themes/%s/cover-256.png", gameName);
+            System.out.println(url);
+
+            placeholder.start();
+            RequestOptions sharedOptions = new RequestOptions().placeholder(placeholder).fitCenter();
+            Glide.with(context).load(url).apply(sharedOptions).into(gameCover);
         }
 
         @Override

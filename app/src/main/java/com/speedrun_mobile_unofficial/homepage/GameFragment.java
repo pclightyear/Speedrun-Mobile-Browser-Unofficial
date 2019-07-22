@@ -1,9 +1,6 @@
 package com.speedrun_mobile_unofficial.homepage;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,11 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 
 import com.speedrun_mobile_unofficial.R;
-import com.speedrun_mobile_unofficial.leaderboard.LeaderBoardActivity;
+import com.speedrun_mobile_unofficial.entities.Enums;
+import com.speedrun_mobile_unofficial.entities.SettingsHepler;
+
+import java.util.HashSet;
 
 
 /**
@@ -27,25 +25,14 @@ import com.speedrun_mobile_unofficial.leaderboard.LeaderBoardActivity;
 public class GameFragment extends Fragment {
     private RecyclerView gameGridView;
     private GameGridAdapter gameFragmentAdapter;
-    private int[] imageId;
+//    private int[] imageId;
     private String[] gameNames;
     private Context context;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        Resources resource = context.getResources();
         this.context = context;
-        this.gameNames = resource.getStringArray(R.array.game_name);
-
-        TypedArray typedArray = resource.obtainTypedArray(R.array.images);
-        int imageCount = typedArray.length();
-        imageId = new int[imageCount];
-        for(int i = 0; i < imageCount; i++) {
-            imageId[i] = typedArray.getResourceId(i, 0);
-        }
-        typedArray.recycle();
     }
 
     @Override
@@ -54,8 +41,17 @@ public class GameFragment extends Fragment {
         gameGridView = rootView.findViewById(R.id.game_grid);
         gameGridView.setLayoutManager(new GridLayoutManager(getActivity().getBaseContext(), 3));
 
-        gameFragmentAdapter = new GameGridAdapter(context, R.layout.fragment_game_grid_item, imageId, gameNames);
+        gameFragmentAdapter = new GameGridAdapter();
         gameGridView.setAdapter(gameFragmentAdapter);
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        HashSet<String> set = SettingsHepler.getSettingStrSet(getActivity(), Enums.SETTING.SUBSCRIPTION);
+        gameFragmentAdapter = new GameGridAdapter(context, R.layout.fragment_game_grid_item, set.toArray());
+        gameGridView.setAdapter(gameFragmentAdapter);
     }
 }
