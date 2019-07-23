@@ -17,21 +17,22 @@
         android:id="@+id/ranking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/leaderboard_text_medieum"
+        android:textSize="@dimen/leaderboard_text_medium"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/trophy"
         android:paddingStart="@dimen/leaderboard_ranking_padding_start"
         android:paddingEnd="@dimen/leaderboard_item_margin_horizontal"
-        android:text="1st"/>
+        android:text=""/>
 
     <TextView
         android:id="@+id/player"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/leaderboard_text_large"
+        android:letterSpacing="0.05"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="pclightyeaer"/>
+        android:text=""/>
 
     <TextView
         android:id="@+id/time"
@@ -41,7 +42,7 @@
         android:layout_marginTop="@dimen/leaderboard_item_margin_vertical"
         android:layout_marginEnd="@dimen/leaderboard_item_margin_horizontal"
         android:layout_alignParentEnd="true"
-        android:text="1m 17s 729"/>
+        android:text=""/>
 
     <TextView
         android:id="@+id/date"
@@ -52,6 +53,6 @@
         android:layout_marginEnd="@dimen/leaderboard_item_margin_horizontal"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/time"
-        android:text="2019-03-19"/>
+        android:text=""/>
 
 </RelativeLayout>
