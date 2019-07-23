@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.speedrun_mobile_unofficial.R;
+import com.speedrun_mobile_unofficial.entities.Enums;
 import com.speedrun_mobile_unofficial.leaderboard.LeaderBoardActivity;
 
 import java.util.List;
@@ -22,8 +23,6 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     private LayoutInflater mInflater;
     private int layoutId;
     private List<SearchListItem> itemList;
-
-    public static final String GAME_NAME = "GAME_NAME";
 
     public SearchListAdapter() {}
 
@@ -75,7 +74,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         public void onClick(View itemView) {
             Context context = itemView.getContext();
             Intent intent = new Intent(context, LeaderBoardActivity.class);
-            intent.putExtra(GAME_NAME, abbreviation);
+            intent.putExtra(Enums.EXTRA.GAMENAME, abbreviation);
             context.startActivity(intent);
         }
     }
