@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.speedrun_mobile_unofficial.R;
 import com.speedrun_mobile_unofficial.entities.Enums;
-import com.speedrun_mobile_unofficial.entities.SettingsHepler;
+import com.speedrun_mobile_unofficial.entities.DataStorageHepler;
 
 import java.util.HashSet;
 
@@ -50,7 +50,7 @@ public class GameFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        HashSet<String> set = SettingsHepler.getSettingStrSet(getActivity(), Enums.SETTING.SUBSCRIPTION);
+        HashSet<String> set = DataStorageHepler.getStorageStrSet(getActivity(), Enums.STORAGE.SUBSCRIPTION);
         gameFragmentAdapter = new GameGridAdapter(context, R.layout.fragment_game_grid_item, set.toArray());
         gameGridView.setAdapter(gameFragmentAdapter);
     }

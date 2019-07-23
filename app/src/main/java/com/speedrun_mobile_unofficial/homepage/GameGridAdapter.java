@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.speedrun_mobile_unofficial.R;
+import com.speedrun_mobile_unofficial.entities.Enums;
 import com.speedrun_mobile_unofficial.leaderboard.LeaderBoardActivity;
 
 public class GameGridAdapter extends RecyclerView.Adapter<GameGridAdapter.ViewHolder> {
@@ -21,8 +22,6 @@ public class GameGridAdapter extends RecyclerView.Adapter<GameGridAdapter.ViewHo
     private LayoutInflater mInflater;
     private Object[] gameNames;
     private int layoutId;
-
-    public static final String GAME_NAME = "GAME_NAME";
 
     public GameGridAdapter() { }
 
@@ -78,7 +77,7 @@ public class GameGridAdapter extends RecyclerView.Adapter<GameGridAdapter.ViewHo
         public void onClick(View itemView) {
             Context context = itemView.getContext();
             Intent intent = new Intent(context, LeaderBoardActivity.class);
-            intent.putExtra(GAME_NAME, gameName);
+            intent.putExtra(Enums.EXTRA.GAMENAME, gameName);
             context.startActivity(intent);
         }
     }

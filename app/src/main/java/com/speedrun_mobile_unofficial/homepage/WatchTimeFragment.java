@@ -141,7 +141,6 @@ public class WatchTimeFragment extends Fragment {
             super(context, layoutResource);
 
             timeText = findViewById(R.id.chart_marker);
-            System.out.println(timeText);
         }
 
         @Override
