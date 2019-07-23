@@ -20,11 +20,31 @@
     <dimen name="leaderboard_platform_release_date_padding_start">13dp</dimen>
 
     <dimen name="leaderboard_text_large">18sp</dimen>
-    <dimen name="leaderboard_text_medieum">14sp</dimen>
+    <dimen name="leaderboard_text_medium">14sp</dimen>
     <dimen name="leaderboard_text_small">12sp</dimen>
     <dimen name="leaderboard_item_margin_vertical">8dp</dimen>
     <dimen name="leaderboard_item_margin_horizontal">16dp</dimen>
     <dimen name="leaderboard_ranking_padding_start">7dp</dimen>
+
+    <dimen name="watch_run_bar_text">20sp</dimen>
+
+    <dimen name="watch_run_cover_image_width">64dp</dimen>
+    <dimen name="watch_run_cover_image_height">90dp</dimen>
+    <dimen name="watch_run_platform_release_date_padding_start">13dp</dimen>
+
+    <dimen name="watch_run_text_extra_large">18sp</dimen>
+    <dimen name="watch_run_text_large">16sp</dimen>
+    <dimen name="watch_run_text_medium">14sp</dimen>
+    <dimen name="watch_run_text_small">12sp</dimen>
+    <dimen name="watch_run_item_margin_vertical">8dp</dimen>
+    <dimen name="watch_run_item_margin_horizontal">16dp</dimen>
+    <dimen name="watch_run_ranking_padding_start">7dp</dimen>
+
+    <dimen name="watch_run_widget_margin_top">10dp</dimen>
+    <dimen name="watch_run_widget_margin_end">5dp</dimen>
+    <dimen name="watch_run_widget_padding">9dp</dimen>
+    <dimen name="watch_run_widget_margin_start_end">8dp</dimen>
+    <dimen name="watch_run_widget_height">48dp</dimen>
 
     <dimen name="watch_time_chart_marker_font_size">12sp</dimen>
 </resources>

@@ -7,11 +7,14 @@
 
     <string name="leader_board_action_subscribe">subscribe</string>
     <string name="leader_board_action_unsubscribe">unsubscribe</string>
-    <string name="leader_board_platform_title">Platforms</string>
-    <string name="leader_board_release_date_title">Release Date</string>
+
+    <string name="platform_title">Platforms</string>
+    <string name="release_date_title">Release Date</string>
 
     <string name="SUBSCRIBED_GAMES">SUBSCRIBED GAMES</string>
     <string name="WATCH_TIME">WATCH TIME</string>
+
+    <string name="view_rules">View Rules</string>
 
     <string name="GAME_GRID_VIEW_ITEM_DESCRIPTION">You can choose the game that you are interested with.</string>
     <string name="TROPHY">This image display the trophy.</string>
