@@ -1,6 +1,7 @@
 package com.speedrun_mobile_unofficial.leaderboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.speedrun_mobile_unofficial.R;
+import com.speedrun_mobile_unofficial.entities.Enums;
+import com.speedrun_mobile_unofficial.watchrecord.WatchRunActivity;
 
 import java.util.List;
 
@@ -23,16 +26,20 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.View
     private LayoutInflater mInflater;
     private int layoutId;
     private List<CategoryBoardItem> itemList;
+    private String categoryName;
+    private String categoryRule;
     private String firstTrophyUri;
     private String secondTrophyUri;
     private String thirdTrophyUri;
     private String fourthTrophyUri;
 
-    public BoardListAdapter(Context context, int layoutId, List<CategoryBoardItem> items) {
+    public BoardListAdapter(Context context, int layoutId, CategoryBoard board) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.layoutId = layoutId;
-        this.itemList = items;
+        this.categoryName = board.getCategoryName();
+        this.itemList = board.getLeaderboard();
+        this.categoryRule = board.getCategoryRule();
         this.firstTrophyUri = CategoryBoardModel.getSharedInstance().getFirstTrophyUri();
         this.secondTrophyUri = CategoryBoardModel.getSharedInstance().getSecondTrophyUri();
         this.thirdTrophyUri = CategoryBoardModel.getSharedInstance().getThirdTrophyUri();
@@ -56,12 +63,13 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.View
         return itemList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final ImageView trophyImage;
         final TextView rankingText;
         final TextView playerText;
         final TextView timeText;
         final TextView dateText;
+        private CategoryBoardItem item;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -70,10 +78,11 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.View
             this.playerText = itemView.findViewById(R.id.player);
             this.timeText = itemView.findViewById(R.id.time);
             this.dateText = itemView.findViewById(R.id.date);
+            itemView.setOnClickListener(this);
         }
 
         void bind(final int position) {
-            CategoryBoardItem item = itemList.get(position);
+            item = itemList.get(position);
 
             rankingText.setText(item.getRanking());
             playerText.setText(item.getPlayer());
@@ -106,6 +115,16 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.View
                 trophyImage.setVisibility(View.VISIBLE);
                 Glide.with(context).load(firstTrophyUri).into(trophyImage);
             }
+        }
+
+        @Override
+        public void onClick(View itemView) {
+            Context context = itemView.getContext();
+            Intent intent = new Intent(context, WatchRunActivity.class);
+            intent.putExtra(Enums.EXTRA.CATEGORYNAME, categoryName);
+            intent.putExtra(Enums.EXTRA.CATEGORYRULE, categoryRule);
+            intent.putExtra(Enums.EXTRA.CATEGORYBOARDITEM, item);
+            context.startActivity(intent);
         }
     }
 }

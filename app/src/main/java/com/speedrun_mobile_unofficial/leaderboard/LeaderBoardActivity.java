@@ -18,8 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.speedrun_mobile_unofficial.R;
 import com.speedrun_mobile_unofficial.entities.Enums;
-import com.speedrun_mobile_unofficial.entities.SettingsHepler;
-import com.speedrun_mobile_unofficial.homepage.GameGridAdapter;
+import com.speedrun_mobile_unofficial.entities.DataStorageHepler;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,6 +30,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
     private TabLayout leaderboardTabLayout;
     private TextView title;
     private String game_name;
+    private boolean first_load = true;
 
     private BoardPagerAdapter leaderboardPagerAdapter;
 
@@ -41,7 +41,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_leaderboard);
 
         Intent intent = getIntent();
-        game_name = intent.getStringExtra(GameGridAdapter.GAME_NAME);
+        game_name = intent.getStringExtra(Enums.EXTRA.GAMENAME);
 
         Toolbar mToolbar = findViewById(R.id.leaderboard_toolbar);
         setSupportActionBar(mToolbar);
@@ -55,44 +55,48 @@ public class LeaderBoardActivity extends AppCompatActivity {
         ProgressBar indicatorUp = findViewById(R.id.leaderboard_progress_bar_up);
         ProgressBar indicatorDown = findViewById(R.id.leaderboard_progress_bar_down);
 
-        LeaderBoardHelper.fetchGameData(getApplicationContext(), game_name, ((success, result) -> {
-            if(success) {
-                this.prepareGameModel(result);
+        if(!first_load) {
+            indicatorUp.setVisibility(ProgressBar.INVISIBLE);
+        } else {
+            first_load = false;
+            LeaderBoardHelper.fetchGameData(getApplicationContext(), game_name, ((success, result) -> {
+                if(success) {
+                    this.prepareGameModel(result);
 
-                title = findViewById(R.id.text);
-                title.setText(CategoryBoardModel.getSharedInstance().getGameName());
+                    title = findViewById(R.id.leaderboard_bar_text);
+                    title.setText(CategoryBoardModel.getSharedInstance().getGameName());
 
-                ImageView coverImage = findViewById(R.id.info_game_cover_image);
-                Glide.with(this).load(CategoryBoardModel.getSharedInstance().getCoverImageSmallUri()).into(coverImage);
+                    ImageView coverImage = findViewById(R.id.leaderboard_info_game_cover_image);
+                    Glide.with(this).load(CategoryBoardModel.getSharedInstance().getCoverImageSmallUri()).into(coverImage);
 
-                TextView platforms = findViewById(R.id.platforms);
-                platforms.setText(CategoryBoardModel.getSharedInstance().getPlatforms());
+                    TextView platforms = findViewById(R.id.leaderboard_platforms);
+                    platforms.setText(CategoryBoardModel.getSharedInstance().getPlatforms());
 
-                TextView releaseDate = findViewById(R.id.release_date);
-                releaseDate.setText(CategoryBoardModel.getSharedInstance().getReleaseDate());
+                    TextView releaseDate = findViewById(R.id.leaderboard_release_date);
+                    releaseDate.setText(CategoryBoardModel.getSharedInstance().getReleaseDate());
 
+                    indicatorDown.setVisibility(ProgressBar.VISIBLE);
+                    indicatorUp.setVisibility(ProgressBar.INVISIBLE);
+                    findViewById(R.id.leaderboard_platform_title).setVisibility(TextView.VISIBLE);
+                    findViewById(R.id.leaderboard_release_date_title).setVisibility(TextView.VISIBLE);
+                }
+            }));
 
-                indicatorUp.setVisibility(ProgressBar.INVISIBLE);
-                indicatorDown.setVisibility(ProgressBar.VISIBLE);
-                findViewById(R.id.platform_title).setVisibility(TextView.VISIBLE);
-                findViewById(R.id.release_date_title).setVisibility(TextView.VISIBLE);
-            }
-        }));
+            LeaderBoardHelper.fetchLeaderBoardData(getApplicationContext(), game_name, (success, result) -> {
+                if(success) {
+                    this.prepareBoardModel(result);
 
-        LeaderBoardHelper.fetchLeaderBoardData(getApplicationContext(), game_name, (success, result) -> {
-            if(success) {
-                this.prepareBoardModel(result);
+                    leaderboardViewPager = findViewById(R.id.boardPager);
+                    leaderboardPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager());
+                    leaderboardViewPager.setAdapter(leaderboardPagerAdapter);
 
-                leaderboardViewPager = findViewById(R.id.boardPager);
-                leaderboardPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager());
-                leaderboardViewPager.setAdapter(leaderboardPagerAdapter);
+                    leaderboardTabLayout = findViewById(R.id.boardTabs);
+                    leaderboardTabLayout.setupWithViewPager(leaderboardViewPager);
 
-                leaderboardTabLayout = findViewById(R.id.boardTabs);
-                leaderboardTabLayout.setupWithViewPager(leaderboardViewPager);
-
-                indicatorDown.setVisibility(ProgressBar.INVISIBLE);
-            }
-        });
+                    indicatorDown.setVisibility(ProgressBar.INVISIBLE);
+                }
+            });
+        }
     }
 
     @Override
@@ -104,7 +108,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        HashSet<String> set = SettingsHepler.getSettingStrSet(this, Enums.SETTING.SUBSCRIPTION);
+        HashSet<String> set = DataStorageHepler.getStorageStrSet(this, Enums.STORAGE.SUBSCRIPTION);
         MenuItem subscribe = menu.findItem(R.id.action_subscribe);
         if(set.contains(game_name)) {
            subscribe.setChecked(true);
@@ -128,12 +132,12 @@ public class LeaderBoardActivity extends AppCompatActivity {
                     if(!item.isChecked()) {
                         item.setChecked(true);
                         item.setIcon(R.drawable.star_26);
-                        SettingsHepler.addStrToSettingStrSet(this, Enums.SETTING.SUBSCRIPTION, game_name);
+                        DataStorageHepler.addStrToStorageStrSet(this, Enums.STORAGE.SUBSCRIPTION, game_name);
                         Toast.makeText(this, String.format("Subscribe to %s", title.getText().toString()), Toast.LENGTH_LONG).show();
                     } else {
                         item.setChecked(false);
                         item.setIcon(R.drawable.hollow_star_26);
-                        SettingsHepler.removeStrFromSettingStrSet(this, Enums.SETTING.SUBSCRIPTION, game_name);
+                        DataStorageHepler.removeStrFromStorageStrSet(this, Enums.STORAGE.SUBSCRIPTION, game_name);
                         Toast.makeText(this, String.format("Unsubscribe to %s", title.getText().toString()), Toast.LENGTH_LONG).show();
                     }
                 }

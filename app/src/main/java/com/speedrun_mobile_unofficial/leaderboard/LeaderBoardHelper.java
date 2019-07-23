@@ -18,7 +18,7 @@ import java.util.Map;
 public class LeaderBoardHelper {
 
     public static void fetchLeaderBoardData(final Context context, String game, final APICallback callback) {
-        String url = String.format("https://www.speedrun.com/api/v1/games/%s/records?top=200&embed=players", game);
+        String url = String.format("https://www.speedrun.com/api/v1/games/%s/records?top=200&embed=players,category", game);
         System.out.println(url);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
@@ -58,17 +58,21 @@ public class LeaderBoardHelper {
 
         for(int i = 0; i < data.length(); ++i) {
             Map<String, Object> categoryMap = new HashMap<>();
-            categoryMap.put("category", data.getJSONObject(i).getString("weblink").split("#")[1]);
+            JSONObject category = data.getJSONObject(i);
+            JSONObject categoryInfo = category.getJSONObject("category").getJSONObject("data");
+            categoryMap.put("category", categoryInfo.getString("name"));
+            categoryMap.put("categoryRule", categoryInfo.getString("rules"));
 
             ArrayList<Map<String, Object>> leaderboard = new ArrayList<>();
-            JSONArray runs = data.getJSONObject(i).getJSONArray("runs");
-            JSONArray players = data.getJSONObject(i).getJSONObject("players").getJSONArray("data");
+            JSONArray runs = category.getJSONArray("runs");
+            JSONArray players = category.getJSONObject("players").getJSONArray("data");
 
             for(int j = 0; j < runs.length(); ++j) {
                 Map<String, Object> leaderboardItemMap = new HashMap<>();
                 leaderboardItemMap.put("ranking", getRankingString(runs.getJSONObject(j).getInt("place")));
 
                 JSONObject run = runs.getJSONObject(j).getJSONObject("run");
+                leaderboardItemMap.put("runId", run.getString("id"));
                 JSONObject playerInRun = run.getJSONArray("players").getJSONObject(0);
                 JSONObject playerInfo = players.getJSONObject(j);
 

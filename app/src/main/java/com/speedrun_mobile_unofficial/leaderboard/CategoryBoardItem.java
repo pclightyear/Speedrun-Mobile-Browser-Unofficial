@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 public class CategoryBoardItem implements Serializable {
+    private String runId;
     private String ranking;
     private String player;
     private String nameStyle;
@@ -14,6 +15,9 @@ public class CategoryBoardItem implements Serializable {
     private String date;
 
     public CategoryBoardItem(Map input){
+        if(input.get("runId") != null) {
+            this.runId = (String) input.get("runId");
+        }
         if(input.get("ranking") != null) {
             this.ranking = (String) input.get("ranking");
         }
@@ -38,6 +42,10 @@ public class CategoryBoardItem implements Serializable {
         if(input.get("date") != null) {
             this.date = (String) input.get("date");
         }
+    }
+
+    public String getRunId() {
+        return runId;
     }
 
     public String getRanking() {

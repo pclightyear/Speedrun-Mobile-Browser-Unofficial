@@ -35,7 +35,7 @@ public class BoardListFragment extends Fragment {
         mBoardListView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
 
         mCategoryBoard = (CategoryBoard) getArguments().getSerializable("board");
-        mBoardListAdapter = new BoardListAdapter(context, R.layout.fragment_leaderboard_list_item, mCategoryBoard.getLeaderboard());
+        mBoardListAdapter = new BoardListAdapter(context, R.layout.fragment_leaderboard_list_item, mCategoryBoard);
         mBoardListView.setAdapter(mBoardListAdapter);
 //        mBoardListView.setOnItemClickListener(onItemClickListener);
         return rootView;
