@@ -6,6 +6,11 @@ import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,11 +28,19 @@ import java.util.Date;
 public class WatchRunActivity extends AppCompatActivity {
 
     private long resumeTime = 0;
+    private String gameName = CategoryBoardModel.getSharedInstance().getGameName();
+    private CategoryBoardItem run;
+    private String weblink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watch_run);
+
+        Toolbar mToolbar = findViewById(R.id.watch_run_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override
@@ -39,14 +52,12 @@ public class WatchRunActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String categoryName = intent.getStringExtra(Enums.EXTRA.CATEGORYNAME);
         String categoryRule = intent.getStringExtra(Enums.EXTRA.CATEGORYRULE);
-        CategoryBoardItem item = (CategoryBoardItem) intent.getSerializableExtra(Enums.EXTRA.CATEGORYBOARDITEM);
+        run = (CategoryBoardItem) intent.getSerializableExtra(Enums.EXTRA.CATEGORYBOARDITEM);
 
-        System.out.println(item.getRunId());
-
-        WatchRunHelper.fetchRunData(getApplicationContext(), item.getRunId(), (success, result) -> {
+        WatchRunHelper.fetchRunData(getApplicationContext(), run.getRunId(), (success, result) -> {
             if(success) {
                 TextView title = findViewById(R.id.watch_run_bar_text);
-                title.setText(CategoryBoardModel.getSharedInstance().getGameName());
+                title.setText(gameName);
 
                 ImageView coverImage = findViewById(R.id.watch_run_info_game_cover_image);
                 Glide.with(this).load(CategoryBoardModel.getSharedInstance().getCoverImageSmallUri()).into(coverImage);
@@ -58,26 +69,67 @@ public class WatchRunActivity extends AppCompatActivity {
                 this.setTextView(R.id.watch_run_platforms, CategoryBoardModel.getSharedInstance().getPlatforms());
                 this.setTextView(R.id.watch_run_release_date, CategoryBoardModel.getSharedInstance().getReleaseDate());
                 this.setTextView(R.id.watch_run_category, categoryName);
-                findViewById(R.id.watch_run_view_rule).setVisibility(ImageView.VISIBLE);
+
+                Button viewrule = findViewById(R.id.watch_run_view_rule);
+                viewrule.setVisibility(ImageView.VISIBLE);
+                viewrule.setOnClickListener(v -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("rules", categoryRule);
+                    RulesDialogFragment ruleDialog = new RulesDialogFragment();
+                    ruleDialog.setArguments(bundle);
+                    ruleDialog.show(getSupportFragmentManager(), "ruleDialog");
+                });
 
                 RunModel model = new RunModel(result);
                 this.setTextView(R.id.watch_run_platform, model.getPlatform());
                 this.setTextView(R.id.watch_run_region, model.getRegion());
 
-                this.setTextView(R.id.watch_run_player, item.getPlayer());
-                this.setTextView(R.id.watch_run_time, item.getTime());
+                this.setTextView(R.id.watch_run_player, run.getPlayer());
+                this.setTextView(R.id.watch_run_time, run.getTime());
 
                 TextView playerText = findViewById(R.id.watch_run_player);
-                if(("solid").equals(item.getNameStyle())) {
-                    playerText.setTextColor(Color.parseColor(item.getColor()));
-                } else if(("gradient").equals(item.getNameStyle())) {
-                    int colorFrom = Color.parseColor(item.getColorFrom());
-                    int colorTo = Color.parseColor(item.getColorTo());
+                if(("solid").equals(run.getNameStyle())) {
+                    playerText.setTextColor(Color.parseColor(run.getColor()));
+                } else if(("gradient").equals(run.getNameStyle())) {
+                    int colorFrom = Color.parseColor(run.getColorFrom());
+                    int colorTo = Color.parseColor(run.getColorTo());
                     Shader shader = new LinearGradient(0, 0, playerText.getHeight(), playerText.getTextSize(), colorFrom, colorTo, Shader.TileMode.CLAMP);
                     playerText.getPaint().setShader(shader);
                 }
+
+                weblink = model.getWeblink();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_watch_run, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        System.out.println("bacck");
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_share:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, String.format("Speedrun by %s in %s, %s\n%s", run.getPlayer(), gameName, run.getTime(), weblink));
+                intent.setType("text/plain");
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -89,6 +141,7 @@ public class WatchRunActivity extends AppCompatActivity {
         String today = format.format(new Date());
         long totalForgroundTime = DataStorageHepler.getStorageLong(this, today) + (pauseTime - resumeTime);
         DataStorageHepler.setStorageLong(this, today, totalForgroundTime);
+        System.out.println(today);
         System.out.println(totalForgroundTime);
     }
 
@@ -99,4 +152,5 @@ public class WatchRunActivity extends AppCompatActivity {
             view.setVisibility(TextView.VISIBLE);
         }
     }
+
 }
