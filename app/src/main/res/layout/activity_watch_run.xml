@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/watch_run_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:theme="@style/Theme.AppCompat"
+        app:popupTheme="@style/Theme.AppCompat">
+
+        <TextView
+            android:id="@+id/watch_run_bar_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:singleLine="true"
+            android:textSize="@dimen/watch_run_bar_text"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:text="Loading..." />
+
+    </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/watch_run_info_game_cover_image"
+        android:layout_below="@+id/watch_run_toolbar"
+        android:layout_width="@dimen/watch_run_cover_image_width"
+        android:layout_height="@dimen/watch_run_cover_image_height"
+        />
+
+    <TextView
+        android:id="@+id/watch_run_platform_title"
+        android:layout_below="@+id/watch_run_toolbar"
+        android:layout_alignEnd="@+id/watch_run_release_date_title"
+        android:textSize="@dimen/watch_run_text_small"
+        android:text="@string/platform_title"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/watch_run_release_date_title"
+        android:layout_below="@+id/watch_run_platforms"
+        android:layout_toEndOf="@+id/watch_run_info_game_cover_image"
+        android:paddingStart="@dimen/watch_run_platform_release_date_padding_start"
+        android:paddingEnd="0dp"
+        android:textSize="@dimen/watch_run_text_small"
+        android:text="@string/release_date_title"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/watch_run_platforms"
+        android:layout_below="@+id/watch_run_toolbar"
+        android:layout_toEndOf="@+id/watch_run_platform_title"
+        android:paddingStart="@dimen/watch_run_platform_release_date_padding_start"
+        android:paddingEnd="0dp"
+        android:textSize="@dimen/watch_run_text_small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/watch_run_release_date"
+        android:layout_below="@+id/watch_run_platforms"
+        android:layout_toEndOf="@+id/watch_run_release_date_title"
+        android:paddingStart="@dimen/watch_run_platform_release_date_padding_start"
+        android:paddingEnd="0dp"
+        android:textSize="@dimen/watch_run_text_small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <ProgressBar
+        android:id="@+id/watch_run_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/watch_run_info_game_cover_image"
+        />
+
+    <TextView
+        android:id="@+id/watch_run_category"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/watch_run_info_game_cover_image"
+        android:layout_above="@id/watch_run_platform"
+        android:layout_marginTop="@dimen/watch_run_widget_margin_top"
+        android:textAlignment="center"
+        android:visibility="invisible"
+        android:gravity="center_vertical|end"
+        android:textSize="@dimen/watch_run_text_extra_large"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text=""/>
+
+    <Button
+        android:id="@+id/watch_run_view_rule"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/watch_run_widget_height"
+        android:layout_below="@id/watch_run_info_game_cover_image"
+        android:layout_toEndOf="@+id/watch_run_category"
+        android:layout_marginTop="@dimen/watch_run_widget_margin_top"
+        android:layout_marginEnd="@dimen/watch_run_widget_margin_start_end"
+        android:layout_alignParentEnd="true"
+        android:visibility="invisible"
+        android:background="@drawable/watch_run_rounded_gray_btn"
+        android:textColor="@color/white"
+        android:letterSpacing="0.08"
+        android:textSize="@dimen/watch_run_text_extra_large"
+        android:text="@string/view_rules"/>
+
+    <TextView
+        android:id="@+id/watch_run_platform"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/watch_run_view_rule"
+        android:layout_marginTop="@dimen/watch_run_widget_margin_top"
+        android:layout_marginEnd="@dimen/watch_run_widget_margin_end"
+        android:layout_marginStart="@dimen/watch_run_widget_margin_start_end"
+        android:visibility="invisible"
+        android:padding="@dimen/watch_run_widget_padding"
+        android:background="@drawable/watch_run_rounded_white_btn"
+        android:textSize="@dimen/watch_run_text_large"
+        android:textColor="@color/black"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/watch_run_region"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/watch_run_view_rule"
+        android:layout_toEndOf="@id/watch_run_platform"
+        android:layout_marginTop="@dimen/watch_run_widget_margin_top"
+        android:visibility="invisible"
+        android:padding="@dimen/watch_run_widget_padding"
+        android:background="@drawable/watch_run_rounded_white_btn"
+        android:textSize="@dimen/watch_run_text_large"
+        android:textColor="@color/black"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/watch_run_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/watch_run_platform"
+        android:layout_marginTop="@dimen/watch_run_widget_margin_top"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:textSize="@dimen/watch_run_text_extra_large"
+        android:letterSpacing="0.05"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/watch_run_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/watch_run_player"
+        android:layout_marginTop="@dimen/watch_run_widget_margin_top"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:textSize="@dimen/watch_run_text_medium"
+        android:text=""/>
+
+</RelativeLayout>

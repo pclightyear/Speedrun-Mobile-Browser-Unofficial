@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/rule_dialog_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/rules_dialog_text_margin_horizontal"
+        android:layout_marginTop="@dimen/rules_dialog_text_margin_top"
+        android:layout_marginBottom="@dimen/rules_dialog_text_margin_bottom"
+        android:textSize="@dimen/rules_dialog_text_size"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/rule_dialog_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rule_dialog_text"
+        android:background="@drawable/watch_run_rounded_gray_btn"
+        android:text="@string/view_rules_ok"/>
+
+</RelativeLayout>
