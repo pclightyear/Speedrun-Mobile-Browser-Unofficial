@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Speedrun Mobile Browser (Unofficial)</string>
     <string name="action_settings">Setting</string>
+    <string name="homepage_setting_export">Export Data</string>
 
     <string name="search_hint">Search a game</string>
     <string name="search_no_result">No result</string>
@@ -14,7 +15,9 @@
     <string name="SUBSCRIBED_GAMES">SUBSCRIBED GAMES</string>
     <string name="WATCH_TIME">WATCH TIME</string>
 
+    <string name="watch_run_action_share">share</string>
     <string name="view_rules">View Rules</string>
+    <string name="view_rules_ok">OK</string>
 
     <string name="GAME_GRID_VIEW_ITEM_DESCRIPTION">You can choose the game that you are interested with.</string>
     <string name="TROPHY">This image display the trophy.</string>
