@@ -60,13 +60,13 @@ public class GameGridAdapter extends RecyclerView.Adapter<GameGridAdapter.ViewHo
             placeholder = new CircularProgressDrawable(context);
             placeholder.setStrokeWidth(5f);
             placeholder.setCenterRadius(30f);
+            placeholder.setColorSchemeColors(R.color.white);
             itemView.setOnClickListener(this);
         }
 
         void bind(final int position) {
             this.gameName = (String) gameNames[position];
             String url = String.format("https://www.speedrun.com/themes/%s/cover-256.png", gameName);
-            System.out.println(url);
 
             placeholder.start();
             RequestOptions sharedOptions = new RequestOptions().placeholder(placeholder).fitCenter();
