@@ -5,6 +5,7 @@ public class Enums {
 
     public interface STORAGE {
         String SUBSCRIPTION = "SUBSCRIPTION";
+        String STARTDATE = "STARTDATE";
         String WATCHTIMEFORMAT = "yyyy-MM-dd";
     }
 
@@ -14,4 +15,5 @@ public class Enums {
         String CATEGORYRULE = "CATEGORYRULE";
         String CATEGORYBOARDITEM = "CATEGORYBOARDITEM";
     }
+
 }
