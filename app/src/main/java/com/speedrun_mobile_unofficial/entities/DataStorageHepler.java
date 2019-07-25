@@ -21,7 +21,7 @@ public class DataStorageHepler {
 
     public static long getStorageLong(Context activity, String storage) {
         SharedPreferences prefs = activity.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
-        return prefs.getLong(storage, -1);
+        return prefs.getLong(storage, 0);
     }
 
     public static String getStorageStr(Context activity, String storage) {
@@ -96,7 +96,7 @@ public class DataStorageHepler {
         do {
             String currentDateString = currentDate.format(formatter);
             long time = getStorageLong(activity, currentDateString);
-            if(time != -1) {
+            if(time != 0) {
                 JSONObject record = new JSONObject();
                 record.put("date", currentDateString);
                 record.put("time", time);

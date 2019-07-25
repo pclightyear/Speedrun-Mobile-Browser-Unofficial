@@ -19,12 +19,13 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.speedrun_mobile_unofficial.R;
+import com.speedrun_mobile_unofficial.entities.DataStorageHepler;
+import com.speedrun_mobile_unofficial.entities.Enums;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A placeholder fragment containing list view to
@@ -32,38 +33,55 @@ import java.util.Map;
  */
 public class WatchTimeFragment extends Fragment {
 
+    View rootView;
     private LineChart mWatchTimeChart;
+    private LineDataSet dataSet;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Enums.STORAGE.WATCHTIMEFORMAT);
+    LocalDate lastDateOfWeek = LocalDate.now();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_watch_time, container, false);
-        mWatchTimeChart = (LineChart) rootView.findViewById(R.id.watchtimechart);
-        lineChartSetup();
-        displayUsageStats();
+        rootView = inflater.inflate(R.layout.fragment_watch_time, container, false);
+        mWatchTimeChart = (LineChart) rootView.findViewById(R.id.watch_time_chart);
+        setUpLineChart();
 
         return rootView;
     }
 
-    private void lineChartSetup() {
-        int[] times = {29, 56, 50, 125, 86, 126, 91};
-        List<WatchTimeModel> dataObjects = new ArrayList<>();
+    @Override
+    public void onResume() {
+        super.onResume();
+        rootView.findViewById(R.id.watch_previous_week_btn).setOnClickListener(v -> {
+            lastDateOfWeek = lastDateOfWeek.minusWeeks(1);
+            setUpLineChart();
+        });
 
-        LocalDate today = LocalDate.now();
-        for(int i = 0; i < times.length; ++i) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("date", today.minusDays(6 - i));
-            map.put("timeInMinutes", times[i]);
-            dataObjects.add(new WatchTimeModel(map));
-        }
+        rootView.findViewById(R.id.watch_next_week_btn).setOnClickListener(v -> {
+            lastDateOfWeek = lastDateOfWeek.plusWeeks(1);
+            setUpLineChart();
+        });
 
+    }
+
+    private void setUpLineChart() {
+        dataSet = new LineDataSet(fetchWeeklyUsageStats(), "Label"); // add entries to dataset
+        setUpLineChartAttribute();
+        mWatchTimeChart.invalidate(); // refresh
+    }
+
+    private List<Entry> fetchWeeklyUsageStats() {
         List<Entry> entries = new ArrayList<>();
 
-        for (int i = 0; i < dataObjects.size(); ++i) {
+        for (int i = 0; i < 7; ++i) {
             // turn your data into Entry objects
-            entries.add(new Entry(i, dataObjects.get(i).getTimeInMinutes()));
+            LocalDate currentDate = lastDateOfWeek.minusDays(6 - i);
+            String currentDateString = currentDate.format(formatter);
+            entries.add(new Entry(i, DataStorageHepler.getStorageLong(this.getContext(), currentDateString) / 60000));
         }
+        return entries;
+    }
 
-        LineDataSet dataSet = new LineDataSet(entries, "Label"); // add entries to dataset
+    private void setUpLineChartAttribute() {
         dataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
         dataSet.setLineWidth(3);
         dataSet.setCircleRadius((float)4);
@@ -95,25 +113,17 @@ public class WatchTimeFragment extends Fragment {
         mWatchTimeChart.getXAxis().setDrawAxisLine(false);
         mWatchTimeChart.getAxisLeft().setDrawAxisLine(false);
         mWatchTimeChart.getAxisRight().setDrawAxisLine(false);
-
-        mWatchTimeChart.invalidate(); // refresh
-    }
-
-    private void displayUsageStats() {
-
     }
 
     public class mValueFormatter extends ValueFormatter {
-        private LocalDate today = LocalDate.now();
-
         @Override
         public String getPointLabel(Entry entry) {
-            return String.format("%d m", (int) entry.getY());
+            return String.format("%d min", (int) entry.getY());
         }
 
         @Override
         public String getAxisLabel(float value, AxisBase axis) {
-            LocalDate toDisplay = today.minusDays(6 - (int) value);
+            LocalDate toDisplay = lastDateOfWeek.minusDays(6 - (int) value);
             return String.format("%d/%d", toDisplay.getMonthValue(), toDisplay.getDayOfMonth());
         }
 
