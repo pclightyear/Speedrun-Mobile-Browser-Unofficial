@@ -1,8 +1,5 @@
 package com.speedrun_mobile_unofficial.homepage;
 
-import android.app.usage.UsageEvents;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -103,17 +100,6 @@ public class WatchTimeFragment extends Fragment {
     }
 
     private void displayUsageStats() {
-        UsageStatsManager usageStats = (UsageStatsManager) getActivity().getSystemService(getActivity().getBaseContext().USAGE_STATS_SERVICE);
-        final long weekTimeMillis = 1000 * 60 * 60 * 24 * 7;
-        UsageEvents events = usageStats.queryEventsForSelf(System.currentTimeMillis() - weekTimeMillis, System.currentTimeMillis());
-
-        List<UsageStats> usageStatsList = usageStats.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, System.currentTimeMillis() - weekTimeMillis, System.currentTimeMillis());
-        System.out.println(usageStatsList.size());
-        for(UsageStats stats : usageStatsList) {
-            if(stats.getPackageName().equals("com.speedrun_mobile_unofficial")) {
-                System.out.println(stats.getTotalTimeInForeground());
-            }
-        }
 
     }
 
