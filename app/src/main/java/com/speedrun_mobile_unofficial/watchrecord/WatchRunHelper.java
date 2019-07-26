@@ -42,7 +42,9 @@ public class WatchRunHelper {
         if(!data.getJSONObject("system").isNull("region")) {
             map.put("region", data.getJSONObject("region").getJSONObject("data").getString("name"));
         }
-        map.put("weblink", data.getString("weblink"));
+        if(!data.isNull("videos")) {
+            map.put("weblink", data.getJSONObject("videos").getJSONArray("links").getJSONObject(0).getString("uri"));
+        }
 
         return map;
     }

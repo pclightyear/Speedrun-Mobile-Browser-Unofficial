@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.speedrun_mobile_unofficial.R;
 import com.speedrun_mobile_unofficial.entities.DataStorageHepler;
 import com.speedrun_mobile_unofficial.entities.Enums;
@@ -97,7 +99,16 @@ public class WatchRunActivity extends AppCompatActivity {
                     playerText.getPaint().setShader(shader);
                 }
 
+                Button openInBrowser = findViewById(R.id.watch_run_in_browser_btn);
+                openInBrowser.setOnClickListener(v -> {
+                    Intent browserIntent = new Intent();
+                    browserIntent.setAction(Intent.ACTION_VIEW);
+                    browserIntent.setData(Uri.parse(weblink));
+                    startActivity(browserIntent);
+                });
+
                 weblink = model.getWeblink();
+                PlayVideoHelper.playVideo(this, weblink);
             }
         });
     }
@@ -152,5 +163,7 @@ public class WatchRunActivity extends AppCompatActivity {
             view.setVisibility(TextView.VISIBLE);
         }
     }
+
+
 
 }
