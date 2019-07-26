@@ -170,4 +170,38 @@
         android:textSize="@dimen/watch_run_text_medium"
         android:text=""/>
 
+    <fragment
+        android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+        android:id="@+id/youtube_fragment"
+        android:layout_below="@id/watch_run_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/watch_run_widget_margin_top" />
+
+    <TextView
+        android:id="@+id/watch_run_failure_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:layout_below="@+id/watch_run_time"
+        android:layout_marginTop="70dp"
+        android:visibility="invisible"
+        android:textColor="@color/white"
+        android:textSize="@dimen/watch_run_text_medium"
+        android:textAlignment="center"
+        android:text="@string/watch_run_failure_hint"/>
+    
+    <Button
+        android:id="@+id/watch_run_in_browser_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/watch_run_failure_hint"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/watch_run_widget_margin_top"
+        android:paddingHorizontal="@dimen/watch_run_widget_padding"
+        android:visibility="invisible"
+        android:textColor="@color/white"
+        android:background="@color/mblack"
+        android:text="@string/watch_run_in_browser_btn"/>
+
 </RelativeLayout>
