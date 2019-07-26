@@ -18,6 +18,8 @@
     <string name="watch_run_action_share">share</string>
     <string name="view_rules">View Rules</string>
     <string name="view_rules_ok">OK</string>
+    <string name="watch_run_failure_hint">Sorry, this video cannot currently be played inside the app.</string>
+    <string name="watch_run_in_browser_btn">Open In Browser</string>
 
     <string name="GAME_GRID_VIEW_ITEM_DESCRIPTION">You can choose the game that you are interested with.</string>
     <string name="TROPHY">This image display the trophy.</string>
