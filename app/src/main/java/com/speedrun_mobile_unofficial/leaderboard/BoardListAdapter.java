@@ -26,24 +26,18 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.View
     private LayoutInflater mInflater;
     private int layoutId;
     private List<CategoryBoardItem> itemList;
+    private GameInfoModel gameInfo;
     private String categoryName;
     private String categoryRule;
-    private String firstTrophyUri;
-    private String secondTrophyUri;
-    private String thirdTrophyUri;
-    private String fourthTrophyUri;
 
-    public BoardListAdapter(Context context, int layoutId, CategoryBoard board) {
+    public BoardListAdapter(Context context, int layoutId, CategoryBoard board, GameInfoModel gameInfo) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.layoutId = layoutId;
+        this.gameInfo = gameInfo;
         this.categoryName = board.getCategoryName();
         this.itemList = board.getLeaderboard();
         this.categoryRule = board.getCategoryRule();
-        this.firstTrophyUri = CategoryBoardModel.getSharedInstance().getFirstTrophyUri();
-        this.secondTrophyUri = CategoryBoardModel.getSharedInstance().getSecondTrophyUri();
-        this.thirdTrophyUri = CategoryBoardModel.getSharedInstance().getThirdTrophyUri();
-        this.fourthTrophyUri = CategoryBoardModel.getSharedInstance().getFourthTrophyUri();
     }
 
     @NonNull
@@ -103,17 +97,17 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.View
 
             if (position <= 2) {
                 trophyImage.setVisibility(View.VISIBLE);
-                if (position == 0 && firstTrophyUri != null) {
-                    Glide.with(context).load(firstTrophyUri).into(trophyImage);
-                } else if (position == 1 && secondTrophyUri != null) {
-                    Glide.with(context).load(secondTrophyUri).into(trophyImage);
-                } else if (position == 2 && thirdTrophyUri != null) {
-                    Glide.with(context).load(thirdTrophyUri).into(trophyImage);
+                if (position == 0 && gameInfo.getFirstTrophyUri() != null) {
+                    Glide.with(context).load(gameInfo.getFirstTrophyUri()).into(trophyImage);
+                } else if (position == 1 && gameInfo.getSecondTrophyUri() != null) {
+                    Glide.with(context).load(gameInfo.getSecondTrophyUri()).into(trophyImage);
+                } else if (position == 2 && gameInfo.getThirdTrophyUri() != null) {
+                    Glide.with(context).load(gameInfo.getThirdTrophyUri()).into(trophyImage);
                 }
             }
-            if (fourthTrophyUri != null){
+            if (gameInfo.getFourthTrophyUri() != null){
                 trophyImage.setVisibility(View.VISIBLE);
-                Glide.with(context).load(firstTrophyUri).into(trophyImage);
+                Glide.with(context).load(gameInfo.getFourthTrophyUri()).into(trophyImage);
             }
         }
 
@@ -121,6 +115,7 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.View
         public void onClick(View itemView) {
             Context context = itemView.getContext();
             Intent intent = new Intent(context, WatchRunActivity.class);
+            intent.putExtra(Enums.EXTRA.GAMEINFO, gameInfo);
             intent.putExtra(Enums.EXTRA.CATEGORYNAME, categoryName);
             intent.putExtra(Enums.EXTRA.CATEGORYRULE, categoryRule);
             intent.putExtra(Enums.EXTRA.CATEGORYBOARDITEM, item);

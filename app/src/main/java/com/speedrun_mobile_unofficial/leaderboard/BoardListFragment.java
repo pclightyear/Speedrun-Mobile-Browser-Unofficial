@@ -19,7 +19,6 @@ import com.speedrun_mobile_unofficial.R;
 public class BoardListFragment extends Fragment {
     private RecyclerView mBoardListView;
     private BoardListAdapter mBoardListAdapter;
-    private CategoryBoard mCategoryBoard;
     private Context context;
 
     @Override
@@ -34,8 +33,9 @@ public class BoardListFragment extends Fragment {
         mBoardListView = rootView.findViewById(R.id.boardList);
         mBoardListView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
 
-        mCategoryBoard = (CategoryBoard) getArguments().getSerializable("board");
-        mBoardListAdapter = new BoardListAdapter(context, R.layout.fragment_leaderboard_list_item, mCategoryBoard);
+        CategoryBoard board = (CategoryBoard) getArguments().getSerializable("board");
+        GameInfoModel gameInfo = (GameInfoModel) getArguments().getSerializable("gameInfo");
+        mBoardListAdapter = new BoardListAdapter(context, R.layout.fragment_leaderboard_list_item, board, gameInfo);
         mBoardListView.setAdapter(mBoardListAdapter);
 //        mBoardListView.setOnItemClickListener(onItemClickListener);
         return rootView;

@@ -11,6 +11,7 @@ public class Enums {
 
     public interface EXTRA {
         String GAMENAME = "GAMENAME";
+        String GAMEINFO = "GAMEINFO";
         String CATEGORYNAME = "CATEGORYNAME";
         String CATEGORYRULE = "CATEGORYRULE";
         String CATEGORYBOARDITEM = "CATEGORYBOARDITEM";

@@ -5,8 +5,8 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,12 +17,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.speedrun_mobile_unofficial.R;
 import com.speedrun_mobile_unofficial.entities.DataStorageHepler;
 import com.speedrun_mobile_unofficial.entities.Enums;
 import com.speedrun_mobile_unofficial.leaderboard.CategoryBoardItem;
-import com.speedrun_mobile_unofficial.leaderboard.CategoryBoardModel;
+import com.speedrun_mobile_unofficial.leaderboard.GameInfoModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,8 +29,8 @@ import java.util.Date;
 public class WatchRunActivity extends AppCompatActivity {
 
     private long resumeTime = 0;
-    private String gameName = CategoryBoardModel.getSharedInstance().getGameName();
     private CategoryBoardItem run;
+    private GameInfoModel gameInfo;
     private String weblink;
 
     @Override
@@ -55,21 +54,22 @@ public class WatchRunActivity extends AppCompatActivity {
         String categoryName = intent.getStringExtra(Enums.EXTRA.CATEGORYNAME);
         String categoryRule = intent.getStringExtra(Enums.EXTRA.CATEGORYRULE);
         run = (CategoryBoardItem) intent.getSerializableExtra(Enums.EXTRA.CATEGORYBOARDITEM);
+        gameInfo = (GameInfoModel) intent.getSerializableExtra(Enums.EXTRA.GAMEINFO);
 
         WatchRunHelper.fetchRunData(getApplicationContext(), run.getRunId(), (success, result) -> {
             if(success) {
                 TextView title = findViewById(R.id.watch_run_bar_text);
-                title.setText(gameName);
+                title.setText(gameInfo.getGameName());
 
                 ImageView coverImage = findViewById(R.id.watch_run_info_game_cover_image);
-                Glide.with(this).load(CategoryBoardModel.getSharedInstance().getCoverImageSmallUri()).into(coverImage);
+                Glide.with(this).load(gameInfo.getCoverImageSmallUri()).into(coverImage);
 
                 findViewById(R.id.watch_run_progress_bar).setVisibility(ProgressBar.INVISIBLE);
                 findViewById(R.id.watch_run_platform_title).setVisibility(TextView.VISIBLE);
                 findViewById(R.id.watch_run_release_date_title).setVisibility(TextView.VISIBLE);
 
-                this.setTextView(R.id.watch_run_platforms, CategoryBoardModel.getSharedInstance().getPlatforms());
-                this.setTextView(R.id.watch_run_release_date, CategoryBoardModel.getSharedInstance().getReleaseDate());
+                this.setTextView(R.id.watch_run_platforms, gameInfo.getPlatforms());
+                this.setTextView(R.id.watch_run_release_date, gameInfo.getReleaseDate());
                 this.setTextView(R.id.watch_run_category, categoryName);
 
                 Button viewrule = findViewById(R.id.watch_run_view_rule);
@@ -134,7 +134,7 @@ public class WatchRunActivity extends AppCompatActivity {
             case R.id.action_share:
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, String.format("Speedrun by %s in %s, %s\n%s", run.getPlayer(), gameName, run.getTime(), weblink));
+                intent.putExtra(Intent.EXTRA_TEXT, String.format("Speedrun by %s in %s, %s\n%s", run.getPlayer(), gameInfo.getGameName(), run.getTime(), weblink));
                 intent.setType("text/plain");
                 startActivity(intent);
                 return true;
@@ -150,10 +150,10 @@ public class WatchRunActivity extends AppCompatActivity {
         long pauseTime = System.currentTimeMillis();
         SimpleDateFormat format = new SimpleDateFormat(Enums.STORAGE.WATCHTIMEFORMAT);
         String today = format.format(new Date());
-        long totalForgroundTime = DataStorageHepler.getStorageLong(this, today) + (pauseTime - resumeTime);
-        DataStorageHepler.setStorageLong(this, today, totalForgroundTime);
+        long totalForegroundTime = DataStorageHepler.getStorageLong(this, today) + (pauseTime - resumeTime);
+        DataStorageHepler.setStorageLong(this, today, totalForegroundTime);
         System.out.println(today);
-        System.out.println(totalForgroundTime);
+        System.out.println(totalForegroundTime);
     }
 
     private void setTextView(int id, String text) {
@@ -163,7 +163,4 @@ public class WatchRunActivity extends AppCompatActivity {
             view.setVisibility(TextView.VISIBLE);
         }
     }
-
-
-
 }

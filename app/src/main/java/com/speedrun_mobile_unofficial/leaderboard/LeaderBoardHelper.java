@@ -31,7 +31,7 @@ public class LeaderBoardHelper {
             callback.onResponse(false, null);
         });
 
-        RequestQueueSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest);
+        RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
     public static void fetchGameData(final Context context, String game, final APICallback callback) {
@@ -48,7 +48,7 @@ public class LeaderBoardHelper {
            callback.onResponse(false, null);
         });
 
-        RequestQueueSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest);
+        RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
     private static Map<String, Object> parseRecordJson(JSONObject jsonObject) throws JSONException {

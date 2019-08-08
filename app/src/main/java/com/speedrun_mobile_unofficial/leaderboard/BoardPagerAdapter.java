@@ -17,13 +17,14 @@ public class BoardPagerAdapter extends FragmentPagerAdapter {
     private final List<String> mFragmentTitleList = new ArrayList<>();
 //    private final Context context;
 
-    public BoardPagerAdapter(FragmentManager fm) {
+    public BoardPagerAdapter(FragmentManager fm, ArrayList<CategoryBoard> boards, GameInfoModel gameInfo) {
         super(fm);
 //        this.context = context;
-        for(CategoryBoard board : CategoryBoardModel.getSharedInstance().getAllCategoryBoard()) {
+        for(CategoryBoard board : boards) {
             BoardListFragment fragment = new BoardListFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("board", board);
+            bundle.putSerializable("gameInfo", gameInfo);
             fragment.setArguments(bundle);
             mFragmentList.add(fragment);
             mFragmentTitleList.add(board.getCategoryName());

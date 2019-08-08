@@ -29,10 +29,12 @@ public class LeaderBoardActivity extends AppCompatActivity {
     private ViewPager leaderboardViewPager;
     private TabLayout leaderboardTabLayout;
     private TextView title;
-    private String game_name;
+    private String gameName;
     private boolean first_load = true;
 
     private BoardPagerAdapter leaderboardPagerAdapter;
+    private ArrayList<CategoryBoard> allCategoryBoard = new ArrayList<>();
+    private GameInfoModel gameInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_leaderboard);
 
         Intent intent = getIntent();
-        game_name = intent.getStringExtra(Enums.EXTRA.GAMENAME);
+        gameName = intent.getStringExtra(Enums.EXTRA.GAMENAME);
 
         Toolbar mToolbar = findViewById(R.id.leaderboard_toolbar);
         setSupportActionBar(mToolbar);
@@ -59,21 +61,21 @@ public class LeaderBoardActivity extends AppCompatActivity {
             indicatorUp.setVisibility(ProgressBar.INVISIBLE);
         } else {
             first_load = false;
-            LeaderBoardHelper.fetchGameData(getApplicationContext(), game_name, ((success, result) -> {
+            LeaderBoardHelper.fetchGameData(getApplicationContext(), gameName, ((success, result) -> {
                 if(success) {
                     this.prepareGameModel(result);
 
                     title = findViewById(R.id.leaderboard_bar_text);
-                    title.setText(CategoryBoardModel.getSharedInstance().getGameName());
+                    title.setText(gameInfo.getGameName());
 
                     ImageView coverImage = findViewById(R.id.leaderboard_info_game_cover_image);
-                    Glide.with(this).load(CategoryBoardModel.getSharedInstance().getCoverImageSmallUri()).into(coverImage);
+                    Glide.with(this).load(gameInfo.getCoverImageSmallUri()).into(coverImage);
 
                     TextView platforms = findViewById(R.id.leaderboard_platforms);
-                    platforms.setText(CategoryBoardModel.getSharedInstance().getPlatforms());
+                    platforms.setText(gameInfo.getPlatforms());
 
                     TextView releaseDate = findViewById(R.id.leaderboard_release_date);
-                    releaseDate.setText(CategoryBoardModel.getSharedInstance().getReleaseDate());
+                    releaseDate.setText(gameInfo.getReleaseDate());
 
                     indicatorDown.setVisibility(ProgressBar.VISIBLE);
                     indicatorUp.setVisibility(ProgressBar.INVISIBLE);
@@ -82,12 +84,12 @@ public class LeaderBoardActivity extends AppCompatActivity {
                 }
             }));
 
-            LeaderBoardHelper.fetchLeaderBoardData(getApplicationContext(), game_name, (success, result) -> {
+            LeaderBoardHelper.fetchLeaderBoardData(getApplicationContext(), gameName, (success, result) -> {
                 if(success) {
                     this.prepareBoardModel(result);
 
                     leaderboardViewPager = findViewById(R.id.boardPager);
-                    leaderboardPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager());
+                    leaderboardPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager(), allCategoryBoard, gameInfo);
                     leaderboardViewPager.setAdapter(leaderboardPagerAdapter);
 
                     leaderboardTabLayout = findViewById(R.id.boardTabs);
@@ -110,7 +112,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         HashSet<String> set = DataStorageHepler.getStorageStrSet(this, Enums.STORAGE.SUBSCRIPTION);
         MenuItem subscribe = menu.findItem(R.id.action_subscribe);
-        if(set.contains(game_name)) {
+        if(set.contains(gameName)) {
            subscribe.setChecked(true);
            subscribe.setIcon(R.drawable.star_26);
         }
@@ -132,12 +134,12 @@ public class LeaderBoardActivity extends AppCompatActivity {
                     if(!item.isChecked()) {
                         item.setChecked(true);
                         item.setIcon(R.drawable.star_26);
-                        DataStorageHepler.addStrToStorageStrSet(this, Enums.STORAGE.SUBSCRIPTION, game_name);
+                        DataStorageHepler.addStrToStorageStrSet(this, Enums.STORAGE.SUBSCRIPTION, gameName);
                         Toast.makeText(this, String.format("Subscribe to %s", title.getText().toString()), Toast.LENGTH_LONG).show();
                     } else {
                         item.setChecked(false);
                         item.setIcon(R.drawable.hollow_star_26);
-                        DataStorageHepler.removeStrFromStorageStrSet(this, Enums.STORAGE.SUBSCRIPTION, game_name);
+                        DataStorageHepler.removeStrFromStorageStrSet(this, Enums.STORAGE.SUBSCRIPTION, gameName);
                         Toast.makeText(this, String.format("Unsubscribe to %s", title.getText().toString()), Toast.LENGTH_LONG).show();
                     }
                 }
@@ -150,22 +152,11 @@ public class LeaderBoardActivity extends AppCompatActivity {
     }
 
     private void prepareGameModel(Map result) {
-        CategoryBoardModel model = new CategoryBoardModel(result);
-        if(CategoryBoardModel.getSharedInstance() != null) {
-            model.setAllCategoryBoard(CategoryBoardModel.getSharedInstance().getAllCategoryBoard());
-        }
-        CategoryBoardModel.setSharedInstance(model);
+        gameInfo = new GameInfoModel(result);
     }
 
     private void prepareBoardModel(Map result) {
-        CategoryBoardModel model;
-        if(CategoryBoardModel.getSharedInstance() == null) {
-            model = new CategoryBoardModel(result);
-        } else {
-            model = CategoryBoardModel.getSharedInstance();
-        }
         List results = (ArrayList) result.get("allCategoryBoard");
-        ArrayList<CategoryBoard> allCategoryBoard = new ArrayList<>();
 
         if ((results != null ? results.size() : 0) > 0) {
             for (int i = 0; i < results.size(); i++) {
@@ -180,13 +171,8 @@ public class LeaderBoardActivity extends AppCompatActivity {
                     leaderboard.add(categoryBoardItem);
                 }
                 categoryBoard.setLeaderboard(leaderboard);
-
                 allCategoryBoard.add(categoryBoard);
             }
-
-            model.setAllCategoryBoard(allCategoryBoard);
         }
-
-        CategoryBoardModel.setSharedInstance(model);
     }
 }

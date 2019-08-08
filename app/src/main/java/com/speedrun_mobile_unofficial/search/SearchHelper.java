@@ -31,7 +31,7 @@ public class SearchHelper {
             callback.onResponse(false, null);
         });
 
-        RequestQueueSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest);
+        RequestQueueSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
     private static Map<String, Object> parseSearchJson(JSONObject jsonObject) throws JSONException {
