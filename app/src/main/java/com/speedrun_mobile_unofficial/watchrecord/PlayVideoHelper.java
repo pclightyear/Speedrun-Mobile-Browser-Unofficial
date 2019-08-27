@@ -26,6 +26,10 @@ public class PlayVideoHelper {
 
     public static String extractYoutubeVideoIdFromLink(String link) {
         System.out.println(link);
+        if(link.length() == 11) {
+            return link;
+        }
+
         if(!link.contains("youtu")) {
             return "";
         }

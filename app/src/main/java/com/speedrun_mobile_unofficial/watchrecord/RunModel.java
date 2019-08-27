@@ -9,6 +9,10 @@ public class RunModel implements Serializable {
     private String region;
     private String weblink;
 
+    private Map<String, Object> map;
+
+    public RunModel(){}
+
     public RunModel(Map input) {
         if(input.get("platform") != null) {
             this.platform = (String) input.get("platform");
@@ -19,6 +23,14 @@ public class RunModel implements Serializable {
         if(input.get("weblink") != null) {
             this.weblink = (String) input.get("weblink");
         }
+    }
+
+    public void setMap(Map input) {
+        map = input;
+    }
+
+    public Map<String, Object> getMap() {
+        return map;
     }
 
     public String getPlatform() {
